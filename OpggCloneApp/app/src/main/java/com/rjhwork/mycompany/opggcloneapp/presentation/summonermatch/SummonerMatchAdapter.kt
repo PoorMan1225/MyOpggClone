@@ -41,14 +41,40 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(bindMatchModel: Any?) {
             (bindMatchModel as BindMatchModel)
-            commonSetImage(bindMatchModel, binding)
+
+            binding.championImageView.loadCircle(bindMatchModel.championIcon)
+            binding.spellFirstImageView.load(bindMatchModel.spell1Icon)
+            binding.spellSecondImageView.load(bindMatchModel.spell2Icon)
+            binding.roonFirstImageView.loadCircle(bindMatchModel.rune1Icon)
+            binding.roonSecondImageView.loadCircle(bindMatchModel.rune2Icon)
+            binding.itemImageView1.load(bindMatchModel.items.item0)
+            binding.itemImageView2.load(bindMatchModel.items.item1)
+            binding.itemImageView3.load(bindMatchModel.items.item2)
+            binding.itemImageView4.load(bindMatchModel.items.item3)
+            binding.itemImageView5.load(bindMatchModel.items.item4)
+            binding.itemImageView6.load(bindMatchModel.items.item5)
+            binding.lastItemImageView.loadCircle(bindMatchModel.items.item6)
             // kill death
-            commonKillDeath(bindMatchModel, binding)
+            binding.killTextView.text = bindMatchModel.killDeathAssist.kill.toString()
+            binding.deathTextView.text = bindMatchModel.killDeathAssist.death.toString()
+            binding.assistTextView.text = bindMatchModel.killDeathAssist.assist.toString()
+            binding.killRateTextView.text =
+                "킬관여 : ${bindMatchModel.killDeathAssist.killAssistRate}%"
+
+            val killScore = getConsecutiveKill(bindMatchModel.killDeathAssist)
+            if (killScore == null) {
+                binding.killCountTextView.isVisible = false
+            } else {
+                binding.killCountTextView.isVisible = true
+                binding.killCountTextView.text = killScore
+            }
             // 게임 정보
-            gameInformation(bindMatchModel, binding)
+            binding.gameModeTextView.text = bindMatchModel.gameMode
+            binding.matchTimeTextView.text = bindMatchModel.matchDuration
+            binding.timeLeftTextView.text = bindMatchModel.date
 
             // event
-            binding.root.setOnClickListener {
+            binding.rootLayout.setOnClickListener {
                 detailDataCallback.invoke(
                     Triple(
                         bindMatchModel.matchId,
@@ -66,11 +92,36 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(bindMatchModel: Any?) {
             (bindMatchModel as BindMatchModel)
-            commonSetImage(bindMatchModel, binding)
+            binding.championImageView.loadCircle(bindMatchModel.championIcon)
+            binding.spellFirstImageView.load(bindMatchModel.spell1Icon)
+            binding.spellSecondImageView.load(bindMatchModel.spell2Icon)
+            binding.roonFirstImageView.loadCircle(bindMatchModel.rune1Icon)
+            binding.roonSecondImageView.loadCircle(bindMatchModel.rune2Icon)
+            binding.itemImageView1.load(bindMatchModel.items.item0)
+            binding.itemImageView2.load(bindMatchModel.items.item1)
+            binding.itemImageView3.load(bindMatchModel.items.item2)
+            binding.itemImageView4.load(bindMatchModel.items.item3)
+            binding.itemImageView5.load(bindMatchModel.items.item4)
+            binding.itemImageView6.load(bindMatchModel.items.item5)
+            binding.lastItemImageView.loadCircle(bindMatchModel.items.item6)
             // kill death
-            commonKillDeath(bindMatchModel, binding)
+            binding.killTextView.text = bindMatchModel.killDeathAssist.kill.toString()
+            binding.deathTextView.text = bindMatchModel.killDeathAssist.death.toString()
+            binding.assistTextView.text = bindMatchModel.killDeathAssist.assist.toString()
+            binding.killRateTextView.text =
+                "킬관여 : ${bindMatchModel.killDeathAssist.killAssistRate}%"
+
+            val killScore = getConsecutiveKill(bindMatchModel.killDeathAssist)
+            if (killScore == null) {
+                binding.killCountTextView.isVisible = false
+            } else {
+                binding.killCountTextView.isVisible = true
+                binding.killCountTextView.text = killScore
+            }
             // 게임 정보
-            gameInformation(bindMatchModel, binding)
+            binding.gameModeTextView.text = bindMatchModel.gameMode
+            binding.matchTimeTextView.text = bindMatchModel.matchDuration
+            binding.timeLeftTextView.text = bindMatchModel.date
 
             // event
             binding.root.setOnClickListener {
@@ -96,7 +147,7 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 binding.winLoseTextView.text = "${kdaModel.win}승 ${kdaModel.lose}패"
                 binding.killDeathAssistRateTextView.text = setDeathTextColor(kdaModel)
                 binding.kdaTextView.text = setKdaTextColor(kdaModel, binding.root.context)
-                binding.killInvolvementTextView.text = (kdaModel.killAssistRate / 10).toString()
+                binding.killInvolvementTextView.text = "(${(kdaModel.killAssistRate / 10)}%)"
             }
 
             pair.second?.let { model ->
@@ -105,10 +156,15 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     binding.mostChampion1ImageView.loadCircle(most1.championIcon)
                     binding.mostChampion1WinRateTextView.text = setRateTextColor(most1)
                 }
+                binding.mostChampion1ImageView.isVisible = model.most1 != null
+                binding.mostChampion1WinRateTextView.isVisible = model.most1 != null
+
                 model.most2?.let { most2 ->
                     binding.mostChampion2ImageView.loadCircle(most2.championIcon)
                     binding.mostChampion2WinRateTextView.text = setRateTextColor(most2)
                 }
+                binding.mostChampion1ImageView.isVisible = model.most2 != null
+                binding.mostChampion1WinRateTextView.isVisible = model.most2 != null
             }
         }
     }
@@ -175,6 +231,7 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 is MatchLoseViewHolder -> {
                     holder.bind(position)
                 }
+                else -> throw Exception("뷰홀더 캐스팅 Exception")
             }
         } ?: kotlin.run {
             (holder as LoadingViewHolder).bind()
@@ -237,60 +294,11 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             )
             in 3.0..4.0 -> text[0..text.length] = ForegroundColorSpan(Color.GREEN)
             in 4.0..5.0 -> text[0..text.length] = ForegroundColorSpan(Color.BLUE)
-            else -> text[0..text.length] = ForegroundColorSpan(Color.RED)
+            else -> text[0..text.length] = ForegroundColorSpan(
+                ContextCompat.getColor(context, R.color.orange)
+            )
         }
         return text
-    }
-
-    private fun commonSetImage(
-        bindMatchModel: BindMatchModel, binding: Any
-    ) {
-        val bind = if (binding is MatchLoseItemBinding) binding else binding as MatchLoseItemBinding
-        bind.apply {
-            championImageView.loadCircle(bindMatchModel.championIcon)
-            spellFirstImageView.load(bindMatchModel.spell1Icon)
-            spellSecondImageView.load(bindMatchModel.spell2Icon)
-            roonFirstImageView.loadCircle(bindMatchModel.rune1Icon)
-            roonSecondImageView.loadCircle(bindMatchModel.rune2Icon)
-            itemImageView1.load(bindMatchModel.items.item0)
-            itemImageView2.load(bindMatchModel.items.item1)
-            itemImageView3.load(bindMatchModel.items.item2)
-            itemImageView4.load(bindMatchModel.items.item3)
-            itemImageView5.load(bindMatchModel.items.item4)
-            itemImageView6.load(bindMatchModel.items.item5)
-            lastItemImageView.loadCircle(bindMatchModel.items.item6)
-        }
-    }
-
-    private fun gameInformation(
-        bindMatchModel: BindMatchModel, binding: Any
-    ) {
-        val bind = if (binding is MatchLoseItemBinding) binding else binding as MatchLoseItemBinding
-        bind.apply {
-            gameModeTextView.text = bindMatchModel.gameMode
-            matchTimeTextView.text = bindMatchModel.matchDuration
-            timeLeftTextView.text = bindMatchModel.date
-        }
-    }
-
-    private fun commonKillDeath(
-        bindMatchModel: BindMatchModel, binding: Any
-    ) {
-        val bind = if (binding is MatchLoseItemBinding) binding else binding as MatchLoseItemBinding
-        bind.apply {
-            killTextView.text = bindMatchModel.killDeathAssist.kill.toString()
-            deathTextView.text = bindMatchModel.killDeathAssist.death.toString()
-            assistTextView.text = bindMatchModel.killDeathAssist.assist.toString()
-            killRateTextView.text = "킬관여 : ${bindMatchModel.killDeathAssist.killAssistRate}%"
-
-            val killScore = getConsecutiveKill(bindMatchModel.killDeathAssist)
-            if (killScore == null) {
-                killCountTextView.isVisible = false
-            } else {
-                killCountTextView.isVisible = true
-                killCountTextView.text = killScore
-            }
-        }
     }
 
     private fun getConsecutiveKill(killDeathAssist: KillDeathAssist): String? {

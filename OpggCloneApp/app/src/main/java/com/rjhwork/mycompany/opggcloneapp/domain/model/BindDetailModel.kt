@@ -1,9 +1,11 @@
 package com.rjhwork.mycompany.opggcloneapp.domain.model
 
 data class BindDetailModel(
+    val puuid:String,
+    val championLevel:Int,
     val maxDamage:Int,
     val championIcon:String?,
-    val minuteCs: String,
+    val minuteCs: Float,
     val spell1:String?,
     val spell2: String?,
     val rune1:String?,

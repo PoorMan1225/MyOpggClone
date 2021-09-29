@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rjhwork.mycompany.opggcloneapp.R
 import com.rjhwork.mycompany.opggcloneapp.data.entity.leaguedata.ProfileLeagueItem
 import com.rjhwork.mycompany.opggcloneapp.data.mapper.toRankDrawable
+import com.rjhwork.mycompany.opggcloneapp.data.mapper.toTierToLetter
 import com.rjhwork.mycompany.opggcloneapp.databinding.ItemFlexRankBinding
 import com.rjhwork.mycompany.opggcloneapp.databinding.ItemSoloRankBinding
 import kotlin.math.roundToInt
@@ -28,8 +29,8 @@ class LeagueDataAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         binding.root.context
                     )
                 )
-                binding.rankTextView.text = "${leagueItem.tier}"
-                binding.lpTextView.text = "${leagueItem.leaguePoints}"
+                binding.rankTextView.text = toTierToLetter(leagueItem.rank, leagueItem.tier)
+                binding.lpTextView.text = "${leagueItem.leaguePoints} LP"
                 binding.winLoseTextView.text = "${leagueItem.wins}승 ${leagueItem.losses}패 (${getWinLostRate(leagueItem)}%)"
             } ?: kotlin.run {
                 binding.summonerRankIconImageView.setImageDrawable(

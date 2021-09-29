@@ -1,22 +1,31 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
+import android.text.Spannable
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.text.set
+import androidx.core.text.toSpannable
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.rjhwork.mycompany.opggcloneapp.R
-import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Participant
 import com.rjhwork.mycompany.opggcloneapp.databinding.LayoutMatchDetailItemBinding
 import com.rjhwork.mycompany.opggcloneapp.databinding.LayoutMatchDetailTotalItemBinding
+import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailModel
 import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailTotalModel
+import com.rjhwork.mycompany.opggcloneapp.extension.load
 import com.rjhwork.mycompany.opggcloneapp.extension.loadCircle
-import com.rjhwork.mycompany.opggcloneapp.util.DataDragonApi
+import java.text.DecimalFormat
 
 class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data = emptyList<Any?>()
     var winFlag: Boolean = false
-    lateinit var puuid: String
+    lateinit var myPuuid: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -42,9 +51,9 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
             is MatchDetailItemViewHolder -> {
-
+                holder.bind(data[position])
             }
             is MatchDetailTotalViewHolder -> {
                 holder.bind(data[position])
@@ -98,14 +107,84 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     inner class MatchDetailItemViewHolder(private val binding: LayoutMatchDetailItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: Any?) {
-            if(data is Participant)  {
-                data.championName?.let { name ->
-                    binding.championImageView.loadCircle(DataDragonApi.getChampionIconUrl(name))
-                }
-                binding.championLevelTextView.text = data.champLevel.toString()
+            if (data is BindDetailModel) {
+                binding.championImageView.loadCircle(data.championIcon)
+                binding.championLevelTextView.text = data.championLevel.toString()
+                binding.spellFirstImageView.load(data.spell1)
+                binding.spellSecondImageView.load(data.spell2)
+                binding.roonFirstImageView.loadCircle(data.rune1)
+                binding.roonSecondImageView.load(data.rune2)
+                binding.nameTextView.text = data.summonerName
+                binding.killTextView.text = data.kill.toString()
+                binding.deathTextView.text = data.death.toString()
+                binding.assistTextView.text = data.assist.toString()
+                binding.kdaTextView.text = getTextColor(data.kda, binding.root.context)
+                // 아이탬 이미지 바인딩
+                bindItems(data, binding)
+                binding.csGoldTextView.text = "${data.cs}(${data.minuteCs}) / ${data.earnedGold}"
+                binding.progressLayout.dealTextView.text =
+                    DecimalFormat("###,###,###").format(data.damage)
+                binding.progressLayout.progressBar.progress = getProgressRate(data)
 
+                // 내 전적인지 확인.
+                binding.myCheckView.isVisible = data.puuid == myPuuid
+                binding.root.setBackgroundColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        if (data.puuid == myPuuid)
+                            R.color.light_green
+                        else
+                            R.color.white
+                    )
+                )
             }
         }
+    }
+
+    private fun getProgressRate(data: BindDetailModel): Int {
+        val deal = data.damage
+        val maxDeal = data.maxDamage
+
+        return (deal * 100) / maxDeal
+    }
+
+    private fun bindItems(data: BindDetailModel, binding: LayoutMatchDetailItemBinding) {
+        binding.itemImageView1.load(data.items.item0)
+        binding.itemImageView2.load(data.items.item1)
+        binding.itemImageView3.load(data.items.item2)
+        binding.itemImageView4.load(data.items.item3)
+        binding.itemImageView5.load(data.items.item4)
+        binding.itemImageView6.load(data.items.item5)
+    }
+
+    private fun getTextColor(kda: String, context: Context): Spannable {
+        val text: Spannable = if (kda == "Perfect") {
+            kda.toSpannable()
+        } else {
+            "${kda.toFloat()}:1".toSpannable()
+        }
+
+        when (kda) {
+            "Perfect" -> {
+                text[0..text.length] = ForegroundColorSpan(
+                    ContextCompat.getColor(context, R.color.orange)
+                )
+            }
+            else -> {
+                when (kda.toFloat()) {
+                    in 0.0..3.0 -> text[0..text.length] = ForegroundColorSpan(
+                        ContextCompat.getColor(context, R.color.white_gray_3)
+                    )
+                    in 3.0..4.0 -> text[0..text.length] = ForegroundColorSpan(Color.GREEN)
+                    in 4.0..5.0 -> text[0..text.length] = ForegroundColorSpan(Color.BLUE)
+                    else -> text[0..text.length] = ForegroundColorSpan(
+                        ContextCompat.getColor(context, R.color.orange)
+                    )
+                }
+            }
+        }
+        return text
     }
 }

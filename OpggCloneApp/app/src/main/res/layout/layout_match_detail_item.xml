@@ -24,6 +24,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/myCheckView"
         app:layout_constraintTop_toTopOf="parent"
@@ -50,10 +51,11 @@
         app:layout_constraintStart_toEndOf="@+id/championImageView"
         app:layout_constraintTop_toTopOf="@id/championImageView">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/spellFirstImageView"
             android:layout_width="15dp"
             android:layout_height="15dp"
+            android:background="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -64,6 +66,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginTop="2dp"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spellFirstImageView"
@@ -75,7 +78,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginStart="2dp"
-            android:background="@color/black"
+            android:background="@drawable/shape_circle_color_black"
             android:src="@drawable/lol_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spellFirstImageView"
@@ -86,7 +89,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginTop="2dp"
-            android:background="@color/white_gray_3"
+            android:background="@drawable/shape_circle_color_gray"
             android:src="@drawable/lol_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -267,7 +270,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginStart="2dp"
-            android:src="@color/white_gray_3"
+            android:background="@drawable/shape_circle_color_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
@@ -291,6 +294,7 @@
             tools:text="163(4.2) / 15.7k" />
 
         <include
+            android:id="@+id/progressLayout"
             layout="@layout/deal_progress_layout"
             android:layout_width="wrap_content"
             android:layout_height="15dp"

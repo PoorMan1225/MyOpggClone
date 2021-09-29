@@ -26,12 +26,22 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initViews()
-
+        bindViews()
         presenter.onCreate(
             intent.getStringExtra(MATCH_ID),
             intent.getStringExtra(SUMMONER_PUUID),
             intent.getBooleanExtra(WIN_LOSE_CHECK_FLAG, false)
         )
+    }
+
+    private fun bindViews() {
+        binding.closeImageView.setOnClickListener {
+            finish()
+            overridePendingTransition(
+                R.anim.sliding_right_and_fade_out_stay,
+                R.anim.sliding_right_and_fade_out
+            )
+        }
     }
 
     private fun initViews() {
@@ -89,10 +99,18 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
             data = dataList
             winFlag = winLoseFlag
             puuid?.let {
-                this.puuid = it
+                this.myPuuid = it
             }
             notifyDataSetChanged()
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        overridePendingTransition(
+            R.anim.sliding_right_and_fade_out_stay,
+            R.anim.sliding_right_and_fade_out
+        )
     }
 
     companion object {

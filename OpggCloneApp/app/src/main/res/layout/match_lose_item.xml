@@ -103,7 +103,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="2dp"
-                android:background="@color/black"
+                android:background="@drawable/shape_circle_color_black"
                 android:src="@drawable/lol_icon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/spellFirstImageView"
@@ -114,7 +114,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginTop="2dp"
-                android:background="@color/white_gray_3"
+                android:background="@drawable/shape_circle_color_gray"
                 android:src="@drawable/lol_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -270,7 +270,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="2dp"
-                android:src="@color/white_gray_3"
+                android:background="@drawable/shape_circle_color_gray"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>

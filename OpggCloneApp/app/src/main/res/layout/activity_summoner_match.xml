@@ -10,8 +10,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -68,10 +67,10 @@
 
 
                 <FrameLayout
-                    android:layout_marginTop="5dp"
                     android:id="@+id/refreshLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/shape_radius_color_blue"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
@@ -122,8 +121,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin">
 
                 <ImageView
                     android:id="@+id/closeImageView"
@@ -133,9 +132,10 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+                    android:visibility="gone"
                     tools:ignore="RtlHardcoded" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/scrollProfileImageView"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -151,7 +151,6 @@
                     android:clickable="true"
                     android:focusable="true" />
             </androidx.appcompat.widget.Toolbar>
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -23,6 +23,9 @@ import com.rjhwork.mycompany.opggcloneapp.presentation.search.SearchPresenter
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchActivity
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchContract
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchPresenter
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailActivity
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailContract
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import okhttp3.OkHttpClient
@@ -141,4 +144,11 @@ val presenterModule = module {
             SummonerMatchPresenter(get(), get(), get(), get(), get(), get(), get(), get())
         }
     }
+
+    scope<SummonerMatchDetailActivity> {
+        scoped<SummonerMatchDetailContract.Presenter> {
+            SummonerMatchDetailPresenter(get(), get(), get(), get(), get(), get(), get())
+        }
+    }
+
 }

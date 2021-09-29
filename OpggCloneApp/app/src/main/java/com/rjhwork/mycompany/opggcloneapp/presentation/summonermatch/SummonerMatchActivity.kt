@@ -20,6 +20,7 @@ import com.rjhwork.mycompany.opggcloneapp.domain.model.BindMatchModel
 import com.rjhwork.mycompany.opggcloneapp.domain.model.ProfileMostChampionModel
 import com.rjhwork.mycompany.opggcloneapp.domain.model.RecentAllKdaModel
 import com.rjhwork.mycompany.opggcloneapp.extension.loadCircle
+import com.rjhwork.mycompany.opggcloneapp.presentation.MainActivity
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailActivity
 import org.koin.android.scope.ScopeActivity
 
@@ -98,6 +99,10 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
 
         (binding.recyclerView.adapter as SummonerMatchAdapter).detailDataCallback = { item ->
             startActivity(SummonerMatchDetailActivity.newIntent(this, item.first, item.second, item.third))
+            overridePendingTransition(
+                R.anim.sliding_left_and_fade_out,
+                R.anim.sliding_left_and_fade_out_stay
+            )
         }
     }
 
@@ -151,6 +156,7 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
         this@SummonerMatchActivity.favoriteEntity = favoriteEntity
         binding.profileIconImageView.loadCircle(favoriteEntity.summonerIcon)
         binding.scrollProfileImageView.loadCircle(favoriteEntity.summonerIcon)
+        binding.closeImageView.isVisible = true
         binding.profileNameTextView.text = favoriteEntity.summonerName
         binding.profileLevelTextView.background =
             ResourcesCompat.getDrawable(resources, R.drawable.shape_rectangle_corner_black, null)
