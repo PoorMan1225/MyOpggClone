@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_gray_3"
+    android:paddingBottom="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/recentGameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최근 10게임"
+            android:textColor="@color/white_gray_2"
+            android:textSize="8sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/winLoseTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/white_gray_2"
+            android:textSize="8sp"
+            app:layout_constraintStart_toStartOf="@+id/recentGameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/recentGameTextView"
+            tools:text="7승 13패" />
+
+        <TextView
+            android:id="@+id/killDeathAssistRateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/winLoseTextView"
+            app:layout_constraintTop_toBottomOf="@id/winLoseTextView"
+            tools:text="5.1 / 2.0 / 3.4" />
+
+        <TextView
+            android:id="@+id/kdaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/darker_gray"
+            android:textSize="8sp"
+            app:layout_constraintStart_toStartOf="@id/killDeathAssistRateTextView"
+            app:layout_constraintTop_toBottomOf="@id/killDeathAssistRateTextView"
+            tools:text="2.69:1" />
+
+        <TextView
+            android:id="@+id/killInvolvementTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/lose_background"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toBottomOf="@+id/kdaTextView"
+            app:layout_constraintStart_toEndOf="@+id/kdaTextView"
+            app:layout_constraintTop_toTopOf="@+id/kdaTextView"
+            tools:text="(57%)" />
+
+        <TextView
+            android:id="@+id/mostChampionRateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모스트 승률"
+            android:textColor="@color/white_gray_2"
+            android:textSize="8sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="@id/mostChampionRateTextView"
+            app:layout_constraintStart_toStartOf="@id/mostChampionRateTextView"
+            app:layout_constraintTop_toBottomOf="@id/mostChampionRateTextView">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/mostChampion1ImageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@id/mostChampion2ImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/lol_icon" />
+
+            <TextView
+                android:id="@+id/mostChampion1WinRateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/darker_gray"
+                android:textSize="8sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/mostChampion1ImageView"
+                app:layout_constraintStart_toStartOf="@id/mostChampion1ImageView"
+                app:layout_constraintTop_toBottomOf="@id/mostChampion1ImageView"
+                tools:text="0%" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/mostChampion2ImageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/mostChampion1ImageView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/lol_icon" />
+
+            <TextView
+                android:id="@+id/mostChampion2WinRateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/darker_gray"
+                android:textSize="8sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/mostChampion2ImageView"
+                app:layout_constraintStart_toStartOf="@id/mostChampion2ImageView"
+                app:layout_constraintTop_toBottomOf="@id/mostChampion2ImageView"
+                tools:text="0%" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

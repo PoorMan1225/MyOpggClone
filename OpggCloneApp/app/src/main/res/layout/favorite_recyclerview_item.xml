@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="6dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemConstraintLayout"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_baseline_star_24" />
+
+        <ImageView
+            android:id="@+id/summonerProfileIconImageView"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/lol_icon" />
+
+        <TextView
+            android:id="@+id/summonerProfileLevelTextView"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_profile_text_level"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/summonerProfileIconImageView"
+            app:layout_constraintEnd_toEndOf="@id/summonerProfileIconImageView"
+            app:layout_constraintStart_toStartOf="@id/summonerProfileIconImageView"
+            tools:text="203" />
+
+        <TextView
+            android:id="@+id/summonerProfileTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summonerProfileLevelTextView"
+            tools:text="Hide on bush" />
+
+        <LinearLayout
+            android:id="@+id/summonerProfileTierLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/summonerProfileTextView">
+
+            <ImageView
+                android:id="@+id/summonerRankImageView"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                tools:src="@drawable/empty_tier" />
+
+
+            <TextView
+                android:id="@+id/summonerRankTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText"
+                tools:text="Platinum 4" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

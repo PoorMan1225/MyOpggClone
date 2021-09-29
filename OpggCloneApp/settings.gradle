@@ -1,0 +1,2 @@
+rootProject.name = "OpggCloneApp"
+include ':app'
