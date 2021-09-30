@@ -124,12 +124,12 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.timeLeftTextView.text = bindMatchModel.date
 
             // event
-            binding.root.setOnClickListener {
+            binding.rootLayout.setOnClickListener {
                 detailDataCallback.invoke(
                     Triple(
                         bindMatchModel.matchId,
                         bindMatchModel.puuid,
-                        true
+                        false
                     )
                 )
             }
@@ -156,15 +156,14 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     binding.mostChampion1ImageView.loadCircle(most1.championIcon)
                     binding.mostChampion1WinRateTextView.text = setRateTextColor(most1)
                 }
-                binding.mostChampion1ImageView.isVisible = model.most1 != null
-                binding.mostChampion1WinRateTextView.isVisible = model.most1 != null
 
                 model.most2?.let { most2 ->
                     binding.mostChampion2ImageView.loadCircle(most2.championIcon)
                     binding.mostChampion2WinRateTextView.text = setRateTextColor(most2)
+                } ?: kotlin.run {
+                    binding.mostChampion2ImageView.isVisible = false
+                    binding.mostChampion2WinRateTextView.isVisible = false
                 }
-                binding.mostChampion1ImageView.isVisible = model.most2 != null
-                binding.mostChampion1WinRateTextView.isVisible = model.most2 != null
             }
         }
     }
@@ -302,7 +301,6 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun getConsecutiveKill(killDeathAssist: KillDeathAssist): String? {
-        Log.d("MainActivity", "${killDeathAssist}")
         return if (killDeathAssist.pentaKills != null && killDeathAssist.pentaKills > 0) {
             "펜타킬"
         } else if (killDeathAssist.quadraKills != null && killDeathAssist.quadraKills > 0) {

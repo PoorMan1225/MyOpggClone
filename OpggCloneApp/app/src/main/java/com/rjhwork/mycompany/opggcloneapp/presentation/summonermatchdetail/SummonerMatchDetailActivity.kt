@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -82,11 +83,12 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
         winLoseFlag: Boolean
     ) {
         binding.appBar.setBackgroundColor(
-            ContextCompat.getColor(
-                this@SummonerMatchDetailActivity,
-                if (winLoseFlag) R.color.win_background else R.color.lose_background
-            )
+            if (winLoseFlag)
+                ContextCompat.getColor(this, R.color.win_background)
+            else
+                ContextCompat.getColor(this, R.color.lose_background)
         )
+        binding.winTextView.text = if (winLoseFlag) "승리" else "패배"
         binding.gameTypeTextView.text = gameMode
         binding.averageTierTextView.text = "평균티어 $averageTier"
         binding.dateTextView.text = gameDate
@@ -103,14 +105,6 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
             }
             notifyDataSetChanged()
         }
-    }
-
-    override fun onBackPressed() {
-        finish()
-        overridePendingTransition(
-            R.anim.sliding_right_and_fade_out_stay,
-            R.anim.sliding_right_and_fade_out
-        )
     }
 
     companion object {

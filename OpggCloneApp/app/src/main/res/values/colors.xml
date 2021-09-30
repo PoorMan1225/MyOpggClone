@@ -19,11 +19,20 @@
     <color name="win_background">#495ED1</color>
     <color name="lose_background">#F10A58</color>
 
-    <color name="light_win_background">#B7BFEA</color>
-    <color name="light_lose_background">#EAABC0</color>
+    <color name="light_win_background">#E1E5FB</color>
+    <color name="light_lose_background">#F6D5E0</color>
 
-    <color name="green">#11BF6E</color>
-    <color name="light_green">#A1DDC1</color>
+    <color name="green">#0CB164</color>
+    <color name="light_green">#D1EADE</color>
 
     <color name="orange">#FF9800</color>
+
+    <color name="unranked_color">#AEAFAF</color>
+    <color name="iron_color">#474646</color>
+    <color name="bronze_color">#634B04</color>
+    <color name="silver_color">#757677</color>
+    <color name="gold_color">#F6A328</color>
+    <color name="platinum_color">#0CB164</color>
+    <color name="diamond_color">#495ED1</color>
+    <color name="master_color">#F83778</color>
 </resources>

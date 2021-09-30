@@ -29,11 +29,10 @@
     </style>
 
     <style name="CollapsingToolbar.winStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimaryVariant">@color/win_background</item>
         <item name="colorPrimary">@color/win_background</item>
     </style>
 
     <style name="CollapsingToolbar.loseStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimaryVariant">@color/lose_background</item>
+        <item name="colorPrimary">@color/lose_background</item>
     </style>
 </resources>

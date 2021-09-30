@@ -1,6 +1,7 @@
 package com.rjhwork.mycompany.opggcloneapp.util
 
 import com.rjhwork.mycompany.opggcloneapp.BuildConfig
+import com.rjhwork.mycompany.opggcloneapp.data.mapper.checkOrnnItem
 
 object DataDragonApi {
     fun getChampionIconUrl(name:String): String {
@@ -13,6 +14,7 @@ object DataDragonApi {
 
     fun getRequestItemImageUrl(itemId: String): String? {
         if(itemId == "0") return null
+        if(checkOrnnItem(itemId)) return itemId
         return "https://ddragon.leagueoflegends.com/cdn/${BuildConfig.VERSION}/img/item/${itemId}.png"
     }
 

@@ -1,6 +1,7 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail
 
 import android.text.format.DateFormat
+import android.util.Log
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Participant
 import com.rjhwork.mycompany.opggcloneapp.data.entity.rune.DataItem
@@ -81,20 +82,23 @@ class SummonerMatchDetailPresenter(
 
         matchData?.let { matchData ->
             val myTeamList = matchData.info?.participants?.filter { it.win == winLoseFlag }
-            addListData(myTeamList, data, spell, runeData, gameDuration)
+            data.addAll(addListData(myTeamList, spell, runeData, gameDuration))
             val otherTeamList = matchData.info?.participants?.filter { it.win != winLoseFlag }
-            addListData(otherTeamList, data, spell, runeData, gameDuration)
+            data.addAll(addListData(otherTeamList, spell, runeData, gameDuration))
+        }
+        data.forEach {
+            Log.d("MainActivity", it.toString())
         }
         return data
     }
 
     private suspend fun addListData(
         list: List<Participant>?,
-        data: MutableList<Any>,
         spell: Spell?,
         runeData: List<DataItem>?,
         gameDuration: String
-    ) {
+    ): MutableList<Any> {
+        val dataList = mutableListOf<Any>()
         val element = mutableListOf(0, 0, 0, 0, 0, 0)
 
         list?.forEach { participant ->
@@ -107,8 +111,9 @@ class SummonerMatchDetailPresenter(
         }
 
         // totalModel
-        data.add(
+        dataList.add(
             BindDetailTotalModel(
+                teamType = list?.get(0)?.teamId,
                 winFlag = list?.get(0)?.win,
                 totalKill = element[0],
                 totalDeath = element[1],
@@ -118,7 +123,7 @@ class SummonerMatchDetailPresenter(
                 dragonKill = element[5]
             )
         )
-        val max = list?.maxByOrNull { it.physicalDamageDealtToChampions ?: 0 }
+        val max = list?.maxByOrNull { it.totalDamageDealtToChampions ?: 0 }
 
         // matchModel
         list?.forEach { participant ->
@@ -132,18 +137,18 @@ class SummonerMatchDetailPresenter(
 
             val leagueData = participant.summonerId?.let { getSummonerProfileLeagueData.invoke(it) }
             val tierData = leagueData?.let { data ->
-                if (data.size > 1) {
-                    "${data[1]?.tier}${data[1]?.rank}"
-                } else {
-                    "${data[0]?.tier}${data[0]?.rank}"
+                when {
+                    data.size > 1 -> "${data[1]?.tier} ${data[1]?.rank}"
+                    data.size == 1 -> "${data[0]?.tier} ${data[0]?.rank}"
+                    else -> ""
                 }
             } ?: ""
 
-            data.add(
+            dataList.add(
                 BindDetailModel(
                     puuid = participant.puuid ?: "",
                     championLevel = participant.champLevel ?: 0,
-                    maxDamage = max?.physicalDamageDealtToChampions ?: 0,
+                    maxDamage = max?.totalDamageDealtToChampions ?: 0,
                     championIcon = participant.championName?.let {
                         DataDragonApi.getChampionIconUrl(it)
                     },
@@ -161,10 +166,11 @@ class SummonerMatchDetailPresenter(
                     items = getItemsData.invoke(participant),
                     cs = participant.totalMinionsKilled?.toString() ?: "",
                     earnedGold = getEarnGold(participant),
-                    damage = participant.physicalDamageDealtToChampions ?: 0
+                    damage = participant.totalDamageDealtToChampions ?: 0
                 )
             )
         }
+        return dataList
     }
 
     private fun getTimeAverageCs(gameDuration: String, participant: Participant): Float {
@@ -215,7 +221,7 @@ class SummonerMatchDetailPresenter(
                 getSummonerProfileLeagueData.invoke(it)
             } ?: return ""
 
-            sumTierRankMMR += if(leagueData.size > 1) {
+            sumTierRankMMR += if (leagueData.size > 1) {
                 val rank = leagueData[1]?.rank ?: "Unknown"
                 val tier = leagueData[1]?.tier ?: "Unknown"
                 "$tier $rank".toMMR()
@@ -225,6 +231,7 @@ class SummonerMatchDetailPresenter(
                 "$tier $rank".toMMR()
             }
         }
+        Log.d("MainActivity", "sumTier : $sumTierRankMMR")
         return sumTierRankMMR.toRank()
     }
 
@@ -234,7 +241,7 @@ class SummonerMatchDetailPresenter(
         }
         val minute = (gameDuration / 1000) / 60
         val second = (gameDuration / 1000) % 60
-        return "${String.format("02d", minute)}:${String.format("02d", second)}"
+        return "${String.format("%02d", minute)}:${String.format("%02d", second)}"
     }
 
     private fun getGameDate(gameCreation: Long, gameDuration: Int): CharSequence {

@@ -73,7 +73,7 @@ fun String.toMMR() =
     }
 
 fun Int.toRank() =
-    when (((this / 100f).roundToInt() * 100)) {
+    when ((((this / 10) / 100f).roundToInt() * 100)) {
         100 -> "IRON 4"
         200 -> "IRON 3"
         300 -> "IRON 2"

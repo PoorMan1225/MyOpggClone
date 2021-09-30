@@ -132,10 +132,11 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     tools:ignore="RtlHardcoded" />
 
                 <ImageView
+                    android:layout_gravity="center"
                     android:id="@+id/scrollProfileImageView"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

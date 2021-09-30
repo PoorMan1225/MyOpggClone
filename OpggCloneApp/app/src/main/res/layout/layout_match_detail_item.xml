@@ -24,7 +24,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/black"
+        android:background="@drawable/shape_circle_color_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/myCheckView"
         app:layout_constraintTop_toTopOf="parent"
@@ -106,13 +106,24 @@
         app:layout_constraintStart_toEndOf="@+id/spellLayout"
         app:layout_constraintTop_toTopOf="@+id/spellLayout">
 
+        <com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.TierBadge
+            android:id="@+id/tierBadgeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="P4" />
+
         <TextView
             android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:textColor="@color/black"
             android:textSize="10sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tierBadgeTextView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Hide on bush" />
 

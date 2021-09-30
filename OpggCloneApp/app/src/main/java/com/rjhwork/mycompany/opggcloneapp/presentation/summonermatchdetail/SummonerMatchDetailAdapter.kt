@@ -7,6 +7,7 @@ import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.text.set
 import androidx.core.text.toSpannable
@@ -29,7 +30,7 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            0, 1 -> {
+            0, 6 -> {
                 MatchDetailTotalViewHolder(
                     LayoutMatchDetailTotalItemBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -82,26 +83,51 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
                     binding.baronImageView.setImageDrawable(
                         ContextCompat.getDrawable(
                             binding.root.context,
-                            if (winFlag) R.drawable.icon_baron_b else R.drawable.icon_baron_r
+                            if (flag) R.drawable.icon_baron_b else R.drawable.icon_baron_r
                         )
                     )
                     binding.towerImageView.setImageDrawable(
                         ContextCompat.getDrawable(
                             binding.root.context,
-                            if (winFlag) R.drawable.icon_tower_b else R.drawable.icon_towe_r
+                            if (flag) R.drawable.icon_tower_b else R.drawable.icon_towe_r
                         )
                     )
                     binding.dragonImageView.setImageDrawable(
                         ContextCompat.getDrawable(
                             binding.root.context,
-                            if (winFlag) R.drawable.icon_dragon_b else R.drawable.icon_dragon_r
+                            if (flag) R.drawable.icon_dragon_b else R.drawable.icon_dragon_r
                         )
                     )
                 }
                 binding.killTextView.text = data.totalKill.toString()
                 binding.deathTextView.text = data.totalDeath.toString()
                 binding.assistTextView.text = data.totalAssist.toString()
+                binding.towerKillCountTextView.text = data.towerKill.toString()
+                binding.baronKillCountTextView.text = data.baronKill.toString()
+                binding.dragonKillCountTextView.text = data.dragonKill.toString()
+                binding.winTextView.setWinOrLoseText(data.winFlag)
+                binding.teamTextView.text = getTeamText(data.teamType)
             }
+        }
+    }
+
+    private fun getTeamText(teamType: Int?): String {
+        return teamType?.let { idx ->
+            if (idx == 100) "(블루)" else "(레드)"
+        } ?: ""
+    }
+
+    private fun TextView.setWinOrLoseText(winFlag: Boolean?) {
+        winFlag?.let { win ->
+            setTextColor(
+                ContextCompat.getColor(context,
+                    if (win)
+                        R.color.win_background
+                    else
+                        R.color.lose_background
+                )
+            )
+            text = if(win) "승리" else "패배"
         }
     }
 
@@ -121,6 +147,7 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
                 binding.deathTextView.text = data.death.toString()
                 binding.assistTextView.text = data.assist.toString()
                 binding.kdaTextView.text = getTextColor(data.kda, binding.root.context)
+                binding.tierBadgeTextView.setBadgeText(data.tier)
                 // 아이탬 이미지 바인딩
                 bindItems(data, binding)
                 binding.csGoldTextView.text = "${data.cs}(${data.minuteCs}) / ${data.earnedGold}"
@@ -157,6 +184,7 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         binding.itemImageView4.load(data.items.item3)
         binding.itemImageView5.load(data.items.item4)
         binding.itemImageView6.load(data.items.item5)
+        binding.lastItemImageView.loadCircle(data.items.item6)
     }
 
     private fun getTextColor(kda: String, context: Context): Spannable {
@@ -168,20 +196,19 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         when (kda) {
             "Perfect" -> {
-                text[0..text.length] = ForegroundColorSpan(
-                    ContextCompat.getColor(context, R.color.orange)
-                )
+                text[0..text.length] =
+                    ForegroundColorSpan(ContextCompat.getColor(context, R.color.orange))
             }
             else -> {
                 when (kda.toFloat()) {
-                    in 0.0..3.0 -> text[0..text.length] = ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.white_gray_3)
-                    )
-                    in 3.0..4.0 -> text[0..text.length] = ForegroundColorSpan(Color.GREEN)
-                    in 4.0..5.0 -> text[0..text.length] = ForegroundColorSpan(Color.BLUE)
-                    else -> text[0..text.length] = ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.orange)
-                    )
+                    in 0.0..3.0 -> text[0..text.length] =
+                        ForegroundColorSpan(ContextCompat.getColor(context, R.color.darker_gray))
+                    in 3.0..4.0 -> text[0..text.length] =
+                        ForegroundColorSpan(ContextCompat.getColor(context, R.color.green))
+                    in 4.0..5.0 -> text[0..text.length] =
+                        ForegroundColorSpan(ContextCompat.getColor(context, R.color.win_background))
+                    else -> text[0..text.length] =
+                        ForegroundColorSpan(ContextCompat.getColor(context, R.color.orange))
                 }
             }
         }

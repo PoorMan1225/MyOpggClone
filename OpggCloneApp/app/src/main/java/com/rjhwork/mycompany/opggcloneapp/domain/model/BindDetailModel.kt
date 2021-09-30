@@ -20,4 +20,8 @@ data class BindDetailModel(
     val cs:String,
     val earnedGold:String,
     val damage:Int
-)
+) {
+    override fun toString(): String {
+        return "BindDetailModel"
+    }
+}

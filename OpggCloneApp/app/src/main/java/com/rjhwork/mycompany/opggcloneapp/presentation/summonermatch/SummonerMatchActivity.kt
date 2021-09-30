@@ -85,7 +85,6 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
                     if (layoutManger.findLastCompletelyVisibleItemPosition()
                         == ((binding.recyclerView.adapter as SummonerMatchAdapter).data.size - 1)
                     ) {
-                        Log.d("MainActivity", "check this")
                         showViewHolderProgress()
                         index += 10
                         if (presenter.showMoreList(favoriteEntity, index) == -1) {
