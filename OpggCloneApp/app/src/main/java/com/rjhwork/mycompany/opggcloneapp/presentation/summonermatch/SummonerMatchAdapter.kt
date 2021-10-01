@@ -31,7 +31,7 @@ import kotlin.math.roundToInt
 @SuppressLint("SetTextI18n")
 class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    lateinit var detailDataCallback: (Triple<String, String, Boolean>) -> Unit
+    lateinit var detailDataCallback: (PassData) -> Unit
 
     var data = mutableListOf<Any?>()
 
@@ -76,7 +76,7 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             // event
             binding.rootLayout.setOnClickListener {
                 detailDataCallback.invoke(
-                    Triple(
+                    PassData(
                         bindMatchModel.matchId,
                         bindMatchModel.puuid,
                         true
@@ -126,7 +126,7 @@ class SummonerMatchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             // event
             binding.rootLayout.setOnClickListener {
                 detailDataCallback.invoke(
-                    Triple(
+                    PassData(
                         bindMatchModel.matchId,
                         bindMatchModel.puuid,
                         false

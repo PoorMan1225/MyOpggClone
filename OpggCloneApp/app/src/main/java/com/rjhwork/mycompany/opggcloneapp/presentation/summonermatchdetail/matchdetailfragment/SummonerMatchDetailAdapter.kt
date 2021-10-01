@@ -1,8 +1,7 @@
-package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail
+package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -18,6 +17,7 @@ import com.rjhwork.mycompany.opggcloneapp.databinding.LayoutMatchDetailItemBindi
 import com.rjhwork.mycompany.opggcloneapp.databinding.LayoutMatchDetailTotalItemBinding
 import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailModel
 import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailTotalModel
+import com.rjhwork.mycompany.opggcloneapp.domain.model.PassData
 import com.rjhwork.mycompany.opggcloneapp.extension.load
 import com.rjhwork.mycompany.opggcloneapp.extension.loadCircle
 import java.text.DecimalFormat
@@ -25,8 +25,7 @@ import java.text.DecimalFormat
 class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data = emptyList<Any?>()
-    var winFlag: Boolean = false
-    lateinit var myPuuid: String
+    lateinit var passData: PassData
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -156,11 +155,11 @@ class SummonerMatchDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
                 binding.progressLayout.progressBar.progress = getProgressRate(data)
 
                 // 내 전적인지 확인.
-                binding.myCheckView.isVisible = data.puuid == myPuuid
+                binding.myCheckView.isVisible = data.puuid == passData.summonerPuuid
                 binding.root.setBackgroundColor(
                     ContextCompat.getColor(
                         binding.root.context,
-                        if (data.puuid == myPuuid)
+                        if (data.puuid == passData.summonerPuuid)
                             R.color.light_green
                         else
                             R.color.white

@@ -4,35 +4,32 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.NavHostFragment
 import com.rjhwork.mycompany.opggcloneapp.R
-import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
-import com.rjhwork.mycompany.opggcloneapp.data.entity.spell.Spell
 import com.rjhwork.mycompany.opggcloneapp.databinding.ActivitySummonerMatchDetailBinding
-import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailTotalModel
-import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchAdapter
+import com.rjhwork.mycompany.opggcloneapp.domain.model.PassData
 import org.koin.android.scope.ScopeActivity
 
 class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract.View {
 
     private val binding by lazy { ActivitySummonerMatchDetailBinding.inflate(layoutInflater) }
+    private val navigationController by lazy {
+        (supportFragmentManager.findFragmentById(R.id.matchDetailHostContainer) as NavHostFragment).navController
+    }
+    private var passData: PassData? = null
 
     override val presenter: SummonerMatchDetailContract.Presenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        passData = intent.getParcelableExtra(PASS_DATA_KEY)
         initViews()
         bindViews()
-        presenter.onCreate(
-            intent.getStringExtra(MATCH_ID),
-            intent.getStringExtra(SUMMONER_PUUID),
-            intent.getBooleanExtra(WIN_LOSE_CHECK_FLAG, false)
-        )
+        presenter.onCreate(passData)
+
     }
 
     private fun bindViews() {
@@ -43,27 +40,48 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
                 R.anim.sliding_right_and_fade_out
             )
         }
+        binding.section1TextView.setOnClickListener {
+            passData?.let { data ->
+                sectionOneSet(data)
+            }
+        }
+        binding.section2TextView.setOnClickListener {
+            passData?.let { data ->
+                sectionTwoSet(data)
+            }
+        }
     }
 
     private fun initViews() {
-        binding.recyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(this@SummonerMatchDetailActivity, RecyclerView.VERTICAL, false)
-            adapter = SummonerMatchDetailAdapter()
+        val bundle = Bundle().apply {
+            putParcelable(PASS_DATA_KEY, passData)
         }
+        navigationController.setGraph(navigationController.graph, bundle)
     }
+
+    private fun sectionOneSet(data: PassData) {
+        binding.section1TextView.setTextColor(getFlagColor(data.winLoseFlag))
+        binding.section1TextView.setBackgroundColor(getColor(R.color.white))
+        binding.section2TextView.setTextColor(getColor(R.color.white))
+        binding.section2TextView.setBackgroundColor(getFlagColor(data.winLoseFlag))
+    }
+
+    private fun sectionTwoSet(data: PassData) {
+        binding.section1TextView.setTextColor(getColor(R.color.white))
+        binding.section1TextView.setBackgroundColor(getFlagColor(data.winLoseFlag))
+        binding.section2TextView.setTextColor(getFlagColor(data.winLoseFlag))
+        binding.section2TextView.setBackgroundColor(getColor(R.color.white))
+    }
+
+    private fun getFlagColor(flag: Boolean) =
+        if (flag)
+            getColor(R.color.win_background)
+        else
+            getColor(R.color.lose_background)
 
     override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
-    }
-
-    override fun showLoadingIndicator() {
-        binding.progressBar.isVisible = true
-    }
-
-    override fun dismissLoadingIndicator() {
-        binding.progressBar.isVisible = false
     }
 
     override fun showAverageTextView() {
@@ -93,30 +111,15 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
         binding.averageTierTextView.text = "평균티어 $averageTier"
         binding.dateTextView.text = gameDate
         binding.timeTextView.text = gameDuration
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun showDataList(dataList: List<Any?>, puuid: String?, winLoseFlag: Boolean) {
-        (binding.recyclerView.adapter as SummonerMatchDetailAdapter).apply {
-            data = dataList
-            winFlag = winLoseFlag
-            puuid?.let {
-                this.myPuuid = it
-            }
-            notifyDataSetChanged()
-        }
+        passData?.let { sectionOneSet(it) }
     }
 
     companion object {
-        private const val MATCH_ID = "MATCH_ID"
-        private const val SUMMONER_PUUID = "SUMMONER_PUUID"
-        private const val WIN_LOSE_CHECK_FLAG = "WIN_LOSE_CHECK_FLAG"
+        const val PASS_DATA_KEY = "PASS_DATA_KEY"
 
-        fun newIntent(context: Context, value1: String, value2: String, value3: Boolean): Intent =
+        fun newIntent(context: Context, passData: PassData): Intent =
             Intent(context, SummonerMatchDetailActivity::class.java).apply {
-                putExtra(MATCH_ID, value1)
-                putExtra(SUMMONER_PUUID, value2)
-                putExtra(WIN_LOSE_CHECK_FLAG, value3)
+                putExtra(PASS_DATA_KEY, passData)
             }
     }
 }

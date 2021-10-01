@@ -26,6 +26,9 @@ import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMat
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailActivity
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailContract
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailPresenter
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragment
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragmentContract
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragmentPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import okhttp3.OkHttpClient
@@ -37,7 +40,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
-@ObsoleteCoroutinesApi
 val appModule = module {
     single { Dispatchers.IO }
 
@@ -147,7 +149,13 @@ val presenterModule = module {
 
     scope<SummonerMatchDetailActivity> {
         scoped<SummonerMatchDetailContract.Presenter> {
-            SummonerMatchDetailPresenter(get(), get(), get(), get(), get(), get(), get())
+            SummonerMatchDetailPresenter(get(), get(), get())
+        }
+    }
+
+    scope<SummonerMatchDetailFragment> {
+        scoped<SummonerMatchDetailFragmentContract.Presenter> {
+            SummonerMatchDetailFragmentPresenter(get(), get(), get(), get(), get(), get(), get())
         }
     }
 

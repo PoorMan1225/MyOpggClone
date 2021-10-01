@@ -8,7 +8,7 @@ interface BasePresenter {
 
     var scope: CoroutineScope
 
-    fun onCreateView()
+    fun onViewCreated()
 
     fun onDestroyView()
 

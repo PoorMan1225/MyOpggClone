@@ -49,7 +49,7 @@ class SearchFragment : ScopeFragment(), SearchContract.View {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         bindViews()
-        presenter.onCreateView()
+        presenter.onViewCreated()
     }
 
     override fun onResume() {

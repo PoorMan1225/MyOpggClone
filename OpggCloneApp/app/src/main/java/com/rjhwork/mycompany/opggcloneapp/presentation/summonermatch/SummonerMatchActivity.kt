@@ -96,8 +96,8 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
             }
         })
 
-        (binding.recyclerView.adapter as SummonerMatchAdapter).detailDataCallback = { item ->
-            startActivity(SummonerMatchDetailActivity.newIntent(this, item.first, item.second, item.third))
+        (binding.recyclerView.adapter as SummonerMatchAdapter).detailDataCallback = { passData ->
+            startActivity(SummonerMatchDetailActivity.newIntent(this@SummonerMatchActivity, passData))
             overridePendingTransition(
                 R.anim.sliding_left_and_fade_out,
                 R.anim.sliding_left_and_fade_out_stay

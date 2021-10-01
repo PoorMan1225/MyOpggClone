@@ -17,8 +17,8 @@ class TierBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTextVi
     }
 
     init {
-        val verticalPadding = dip(4f)
-        val horizontalPadding = dip(2f)
+        val verticalPadding = dip(2f)
+        val horizontalPadding = dip(4f)
         setPadding(
             horizontalPadding,
             verticalPadding,

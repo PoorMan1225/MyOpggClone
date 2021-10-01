@@ -40,7 +40,7 @@ class SearchPresenter(
             .launchIn(scope)
     }
 
-    override fun onCreateView() {
+    override fun onViewCreated() {
         fetchProfileSummonerData(true)
         fetchFavoriteData()
     }

@@ -110,6 +110,7 @@
             android:id="@+id/tierBadgeTextView"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
+            android:gravity="center"
             android:textSize="10sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
