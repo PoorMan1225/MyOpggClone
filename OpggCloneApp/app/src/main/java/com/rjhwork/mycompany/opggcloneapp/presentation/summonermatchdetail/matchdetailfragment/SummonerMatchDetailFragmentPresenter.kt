@@ -1,10 +1,12 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment
 
+import com.rjhwork.mycompany.opggcloneapp.data.entity.leaguedata.ProfileLeagueItem
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Participant
 import com.rjhwork.mycompany.opggcloneapp.data.entity.rune.DataItem
 import com.rjhwork.mycompany.opggcloneapp.data.entity.spell.Spell
 import com.rjhwork.mycompany.opggcloneapp.data.mapper.getSpellIdByKey
+import com.rjhwork.mycompany.opggcloneapp.data.mapper.toMMR
 import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailModel
 import com.rjhwork.mycompany.opggcloneapp.domain.model.BindDetailTotalModel
 import com.rjhwork.mycompany.opggcloneapp.domain.model.PassData
@@ -133,9 +135,6 @@ class SummonerMatchDetailFragmentPresenter(
             }
 
             val leagueData = participant.summonerId?.let { getSummonerProfileLeagueData.invoke(it) }
-            val tierData = leagueData?.let { data ->
-                if (data.isNotEmpty()) "${data[0]?.tier} ${data[0]?.rank}" else ""
-            } ?: ""
 
             dataList.add(
                 BindDetailModel(
@@ -150,7 +149,7 @@ class SummonerMatchDetailFragmentPresenter(
                     spell2 = spell2Id?.let { DataDragonApi.getSummonerSpellIconUrl(it) },
                     rune1 = icon1?.let { DataDragonApi.getSummonerRuneImageUrl(it) },
                     rune2 = dataItem?.icon?.let { DataDragonApi.getSummonerRuneImageUrl(it) },
-                    tier = tierData,
+                    tier = leagueData?.let { getTierData(it) } ?: "",
                     summonerName = participant.summonerName ?: "",
                     kill = participant.kills ?: 0,
                     death = participant.deaths ?: 0,
@@ -165,6 +164,18 @@ class SummonerMatchDetailFragmentPresenter(
         }
         return dataList
     }
+
+    private fun getTierData(data: List<ProfileLeagueItem?>) =
+        if (data.size > 1) {
+            val sortedList = data.sortedByDescending { it?.queueType == "RANKED_SOLO_5x5" }
+            val rank = sortedList[0]?.rank ?: "Error"
+            val tier = sortedList[0]?.tier ?: "Error"
+            "$tier $rank"
+        } else {
+            val rank = data[0]?.rank ?: "Error"
+            val tier = data[0]?.tier ?: "Error"
+            if (data[0]?.queueType == "RANKED_SOLO_5x5") "$tier $rank" else ""
+        }
 
     private fun getTimeAverageCs(gameDuration: String, participant: Participant): Float {
         val split = gameDuration.split(":")

@@ -49,6 +49,8 @@ class TierBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTextVi
         val pair = getBadgeTextAndColor(text)
         paint.color = ContextCompat.getColor(context, pair.second)
         this.text = pair.first
+        if(pair.first == "-")
+            width = dip(15f)
         invalidate()
     }
 

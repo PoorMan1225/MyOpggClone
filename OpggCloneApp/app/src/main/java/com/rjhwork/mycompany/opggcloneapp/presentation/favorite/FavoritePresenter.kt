@@ -59,9 +59,13 @@ class FavoritePresenter(
                 if (summonerProfile == null) {
                     view.showDialog(summonerName)
                 } else {
-                    val profileIcon = DataDragonApi.getSummonerProfileIcon(summonerProfile.profileIconId.toString())
+                    val profileIcon =
+                        DataDragonApi.getSummonerProfileIcon(summonerProfile.profileIconId.toString())
                     val profileLeagueItem = getSummonerProfileLeagueData(summonerProfile.id!!)
-                    insertFavoriteDataToDB(profileIcon, summonerProfile, profileLeagueItem?.first())
+                    val rankItem = profileLeagueItem?.let { data ->
+                        getRankItem(data)
+                    }
+                    insertFavoriteDataToDB(profileIcon, summonerProfile, rankItem)
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -70,6 +74,13 @@ class FavoritePresenter(
             }
         }
     }
+
+    private fun getRankItem(data: List<ProfileLeagueItem?>) =
+        if (data.size > 1) {
+            data.sortedByDescending { it?.queueType == "RANKED_SOLO_5x5" }[0]
+        } else {
+            if (data[0]?.queueType == "RANKED_SOLO_5x5") data[0] else null
+        }
 
     private suspend fun insertFavoriteDataToDB(
         profileIcon: String?,

@@ -1,6 +1,7 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail
 
 import android.text.format.DateFormat
+import android.util.Log
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
 import com.rjhwork.mycompany.opggcloneapp.data.mapper.gameMode
 import com.rjhwork.mycompany.opggcloneapp.data.mapper.toMMR
@@ -64,17 +65,16 @@ class SummonerMatchDetailPresenter(
                 getSummonerProfileLeagueData.invoke(it)
             } ?: return ""
 
-            val rank = if (leagueData.isNotEmpty())
-                leagueData[0]?.rank ?: "Error"
-            else
-                "Unknown"
-
-            val tier = if (leagueData.isNotEmpty())
-                leagueData[0]?.tier ?: "Error"
-            else
-                "Unknown"
-
-            sumTierRankMMR += "$tier $rank".toMMR()
+            sumTierRankMMR += if(leagueData.size > 1) {
+                val sortedList = leagueData.sortedByDescending { it?.queueType == "RANKED_SOLO_5x5" }
+                val rank = sortedList[0]?.rank ?: "Error"
+                val tier = sortedList[0]?.tier ?: "Error"
+                "$tier $rank".toMMR()
+            }else {
+                val rank = leagueData[0]?.rank ?: "Error"
+                val tier = leagueData[0]?.tier ?: "Error"
+                if(leagueData[0]?.queueType == "RANKED_SOLO_5x5") "$tier $rank".toMMR() else 0
+            }
         }
         return sumTierRankMMR.toRank()
     }

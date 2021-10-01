@@ -74,7 +74,8 @@ fun String.toMMR() =
 
 fun Int.toRank() =
     when ((((this / 10) / 100f).roundToInt() * 100)) {
-        100 -> "IRON 4"
+        0 -> "UNRANKED"
+        in 1..100 -> "IRON 4"
         200 -> "IRON 3"
         300 -> "IRON 2"
         400 -> "IRON 1"
@@ -98,9 +99,9 @@ fun Int.toRank() =
         2200 -> "DIAMOND 3"
         2300 -> "DIAMOND 2"
         2400 -> "DIAMOND 1"
-        2500 -> "MASTER"
-        2900 -> "GRANDMASTER"
-        3300 -> "CHALLENGER"
+        in 2500..2700 -> "MASTER"
+        in 2700..3100 -> "GRANDMASTER"
+        in 3100..3300 -> "CHALLENGER"
         else -> ""
     }
 
