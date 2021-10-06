@@ -6,18 +6,17 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.NavHostFragment
+import androidx.fragment.app.Fragment
 import com.rjhwork.mycompany.opggcloneapp.R
 import com.rjhwork.mycompany.opggcloneapp.databinding.ActivitySummonerMatchDetailBinding
 import com.rjhwork.mycompany.opggcloneapp.domain.model.PassData
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.MatchAnalysisFragment
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragment
 import org.koin.android.scope.ScopeActivity
 
 class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract.View {
 
     private val binding by lazy { ActivitySummonerMatchDetailBinding.inflate(layoutInflater) }
-    private val navigationController by lazy {
-        (supportFragmentManager.findFragmentById(R.id.matchDetailHostContainer) as NavHostFragment).navController
-    }
     private var passData: PassData? = null
 
     override val presenter: SummonerMatchDetailContract.Presenter by inject()
@@ -29,7 +28,6 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
         initViews()
         bindViews()
         presenter.onCreate(passData)
-
     }
 
     private fun bindViews() {
@@ -43,20 +41,37 @@ class SummonerMatchDetailActivity : ScopeActivity(), SummonerMatchDetailContract
         binding.section1TextView.setOnClickListener {
             passData?.let { data ->
                 sectionOneSet(data)
+                showFragment(SummonerMatchDetailFragment(), SummonerMatchDetailFragment.TAG)
             }
         }
         binding.section2TextView.setOnClickListener {
             passData?.let { data ->
                 sectionTwoSet(data)
+                showFragment(MatchAnalysisFragment(), MatchAnalysisFragment.TAG)
             }
         }
     }
 
     private fun initViews() {
-        val bundle = Bundle().apply {
-            putParcelable(PASS_DATA_KEY, passData)
+        showFragment(SummonerMatchDetailFragment(), SummonerMatchDetailFragment.TAG)
+    }
+
+    private fun showFragment(fragment: Fragment, tag: String) {
+        val findFragment = supportFragmentManager.findFragmentByTag(tag)
+        supportFragmentManager.fragments.forEach { fm ->
+            supportFragmentManager.beginTransaction().hide(fm).commit()
         }
-        navigationController.setGraph(navigationController.graph, bundle)
+        findFragment?.let {
+            supportFragmentManager.beginTransaction().show(it).commit()
+        } ?: kotlin.run {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, fragment.apply {
+                    arguments = Bundle().apply {
+                        putParcelable(PASS_DATA_KEY, passData)
+                    }
+                }, tag)
+                .commitAllowingStateLoss()
+        }
     }
 
     private fun sectionOneSet(data: PassData) {

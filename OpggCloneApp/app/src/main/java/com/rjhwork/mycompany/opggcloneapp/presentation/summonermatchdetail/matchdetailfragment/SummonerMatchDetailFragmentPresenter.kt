@@ -26,7 +26,6 @@ class SummonerMatchDetailFragmentPresenter(
     private val getRuneData: GetRuneData,
 ) : SummonerMatchDetailFragmentContract.Presenter {
 
-
     override var scope: CoroutineScope = MainScope()
 
     override fun onViewCreated() {}

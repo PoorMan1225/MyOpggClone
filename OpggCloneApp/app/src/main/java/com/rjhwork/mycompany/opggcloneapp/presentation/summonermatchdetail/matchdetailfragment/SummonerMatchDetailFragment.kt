@@ -69,4 +69,8 @@ class SummonerMatchDetailFragment(): ScopeFragment(), SummonerMatchDetailFragmen
             notifyDataSetChanged()
         }
     }
+
+    companion object {
+        const val TAG = "SummonerMatchDetailFragment"
+    }
 }

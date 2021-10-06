@@ -182,12 +182,10 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/matchDetailHostContainer"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/match_detail_navigation" />
+           />
     </com.google.android.material.appbar.AppBarLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
