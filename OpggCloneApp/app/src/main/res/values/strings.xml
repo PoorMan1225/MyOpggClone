@@ -4,4 +4,11 @@
     <string name="title_community">커뮤니티</string>
     <string name="title_ranking">랭킹</string>
     <string name="string_summoner_search">소환사 검색</string>
+
+    <string name="tab1">챔피언 킬</string>
+    <string name="tab2">골드</string>
+    <string name="tab3">가한 피해량</string>
+    <string name="tab4">받은 피해량</string>
+    <string name="tab5">CS</string>
+    <string name="tab6">와드 설치</string>
 </resources>

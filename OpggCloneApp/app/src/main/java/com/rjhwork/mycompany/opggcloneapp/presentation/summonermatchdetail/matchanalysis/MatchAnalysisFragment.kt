@@ -1,17 +1,20 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.google.android.material.tabs.TabLayoutMediator
+import com.rjhwork.mycompany.opggcloneapp.R
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
 import com.rjhwork.mycompany.opggcloneapp.databinding.FragmentMatchAnalysisBinding
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailActivity
 import org.koin.android.scope.ScopeFragment
 
 class MatchAnalysisFragment: ScopeFragment(), MatchAnalysisContract.View {
-
-    override var matchData: Match? = null
 
     private var binding: FragmentMatchAnalysisBinding? = null
 
@@ -29,18 +32,37 @@ class MatchAnalysisFragment: ScopeFragment(), MatchAnalysisContract.View {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         bindViews()
+        presenter.onViewCreated(arguments?.getParcelable(SummonerMatchDetailActivity.PASS_DATA_KEY))
     }
 
-    private fun initViews() {
-        binding?.viewPager?.adapter = MatchAnalysisAdapter(this).apply {
-            matchData?.let {
-                match = it
+    private fun initViews() = Unit
+
+    private fun bindViews() = Unit
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun setAdapterData(pair: Pair<String, Match?>) {
+        Log.d("MatchAnalysisFragment", "여기까진 왔습니다. ")
+        repeat(6) {
+            binding?.let {
+                it.tabLayout.addTab(it.tabLayout.newTab())
             }
         }
-    }
 
-    private fun bindViews() {
-
+        binding?.viewPager?.adapter = MatchAnalysisAdapter(this, ).apply {
+            this.pair = pair
+        }
+        binding?.let {
+            TabLayoutMediator(it.tabLayout, it.viewPager) { tab, position ->
+                when(position) {
+                    0 -> tab.text = getString(R.string.tab1)
+                    1 -> tab.text = getString(R.string.tab2)
+                    2 -> tab.text = getString(R.string.tab3)
+                    3 -> tab.text = getString(R.string.tab4)
+                    4 -> tab.text = getString(R.string.tab5)
+                    5 -> tab.text = getString(R.string.tab6)
+                }
+            }.attach()
+        }
     }
 
     override fun showLoadingIndicator() {

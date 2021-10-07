@@ -13,6 +13,7 @@ import com.rjhwork.mycompany.opggcloneapp.extension.dip
 
 class RankingBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTextView(context, attrs) {
 
+    private val ct = context
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
     }
@@ -46,7 +47,7 @@ class RankingBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTex
     }
 
     fun setBadgeTextColor(text: CharSequence, @ColorRes color:Int) {
-        setBackgroundColor(getColor(context, color))
+        setBackgroundColor(getColor(ct, color))
         this.text = text
         invalidate()
     }

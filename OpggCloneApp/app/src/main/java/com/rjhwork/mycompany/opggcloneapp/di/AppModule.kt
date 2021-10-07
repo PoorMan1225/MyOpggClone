@@ -26,6 +26,9 @@ import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMat
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailActivity
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailContract
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailPresenter
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.MatchAnalysisContract
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.MatchAnalysisFragment
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.MatchAnalysisPresenter
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragment
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragmentContract
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchdetailfragment.SummonerMatchDetailFragmentPresenter
@@ -156,6 +159,12 @@ val presenterModule = module {
     scope<SummonerMatchDetailFragment> {
         scoped<SummonerMatchDetailFragmentContract.Presenter> {
             SummonerMatchDetailFragmentPresenter(get(), get(), get(), get(), get(), get(), get())
+        }
+    }
+
+    scope<MatchAnalysisFragment> {
+        scoped<MatchAnalysisContract.Presenter> {
+            MatchAnalysisPresenter(get(),get())
         }
     }
 

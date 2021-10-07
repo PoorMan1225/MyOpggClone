@@ -1,15 +1,21 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.analysisfragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.rjhwork.mycompany.opggcloneapp.databinding.FragmentAnalysisDataBinding
+import com.rjhwork.mycompany.opggcloneapp.domain.model.AnalysisModel
+import org.koin.experimental.builder.getArguments
 
-class AnalysisDataFragment(): Fragment() {
+class AnalysisDataFragment() : Fragment() {
 
-    private var binding:FragmentAnalysisDataBinding? = null
+    private var binding: FragmentAnalysisDataBinding? = null
+    private var analysisModel: AnalysisModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,10 +32,39 @@ class AnalysisDataFragment(): Fragment() {
     }
 
     private fun initView() {
-        binding?.listView?.adapter = AnalysisDataAdapter()
+        analysisModel = arguments?.getParcelable(PASS_ANALYSIS_DATA)
+
+        binding?.recyclerView?.apply {
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            adapter = AnalysisDataAdapter()
+        }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun bindView() {
+        (binding?.recyclerView?.adapter as AnalysisDataAdapter).apply {
+            analysisModel?.let { model ->
+                binding?.winTeamTextView?.text = model.sumWin.toString()
+                binding?.loseTeamTextView?.text = model.sumLose.toString()
+                this.puuid = model.myPuuid
+                this.fragmentPosition = model.position
+                this.dataList = model.list
+                notifyDataSetChanged()
+            }
+        }
+    }
 
+    companion object {
+        private const val PASS_ANALYSIS_DATA = "PASS_ANALYSIS_DATA"
+
+        fun newInstance(analysisModel: AnalysisModel): Fragment {
+            val args = Bundle().apply {
+                putParcelable(PASS_ANALYSIS_DATA, analysisModel)
+            }
+
+            return AnalysisDataFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

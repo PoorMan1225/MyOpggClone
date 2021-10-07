@@ -13,12 +13,12 @@ class MatchAnalysisContract {
 
         fun dismissLoadingIndicator()
 
-        var matchData:Match?
+        fun setAdapterData(pair:Pair<String, Match?>)
     }
 
     interface Presenter: BasePresenter {
 
-        fun onViewCreated(passData: PassData)
+        fun onViewCreated(passData: PassData?)
 
     }
 }
