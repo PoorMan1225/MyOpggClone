@@ -5,7 +5,12 @@ import com.rjhwork.mycompany.opggcloneapp.data.mapper.checkOrnnItem
 
 object DataDragonApi {
     fun getChampionIconUrl(name:String): String {
-        return "https://ddragon.leagueoflegends.com/cdn/${BuildConfig.VERSION}/img/champion/${name}.png"
+        val correctName = if(name == "FiddleSticks") {
+            "Fiddlesticks"
+        } else {
+            name
+        }
+        return "https://ddragon.leagueoflegends.com/cdn/${BuildConfig.VERSION}/img/champion/${correctName}.png"
     }
 
     fun getSummonerProfileIcon(iconId:String) : String {

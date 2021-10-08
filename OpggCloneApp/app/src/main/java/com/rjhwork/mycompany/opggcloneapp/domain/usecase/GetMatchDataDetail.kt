@@ -56,7 +56,7 @@ class GetMatchDataDetail(
                 }
 
                 setRecentDataModel(recentAllKdaModel, participant, killAssistRate)
-                val matchDuration = getMatchDuration(match)
+                val matchDuration = getMatchDuration(match?.info?.gameStartTimestamp, match?.info?.gameEndTimestamp)
 
                 participant?.let { participant ->
                     val championIcon =
@@ -134,17 +134,13 @@ class GetMatchDataDetail(
         }
     }
 
-    private fun getMatchDuration(match: Match?): String {
-        val gameDuration = match?.info?.gameDuration
-        val minute = gameDuration?.let { duration -> (duration / 1000) / 60 }
-        val second = gameDuration?.let { duration ->
-            val result = (duration / 1000) % 60
-            when {
-                result == 0 -> "00"
-                result < 10 -> "0${result}"
-                else -> "$result"
-            }
+    private fun getMatchDuration(gameStart:Long?, gameEnd:Long?): String {
+        if(gameStart == null || gameEnd == null) {
+            return "00:00"
         }
-        return "${minute}:${second}"
+        val gameDuration = gameEnd - gameStart
+        val minute = (gameDuration / 1000) / 60
+        val second = (gameDuration / 1000) % 60
+        return "${String.format("%02d", minute)}:${String.format("%02d", second)}"
     }
 }

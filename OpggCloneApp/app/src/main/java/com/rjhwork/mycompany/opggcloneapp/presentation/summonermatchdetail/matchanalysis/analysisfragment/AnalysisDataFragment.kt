@@ -1,7 +1,7 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.analysisfragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rjhwork.mycompany.opggcloneapp.databinding.FragmentAnalysisDataBinding
 import com.rjhwork.mycompany.opggcloneapp.domain.model.AnalysisModel
-import org.koin.experimental.builder.getArguments
 
 class AnalysisDataFragment() : Fragment() {
 
@@ -28,7 +27,6 @@ class AnalysisDataFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        bindView()
     }
 
     private fun initView() {
@@ -36,20 +34,14 @@ class AnalysisDataFragment() : Fragment() {
 
         binding?.recyclerView?.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            adapter = AnalysisDataAdapter()
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun bindView() {
-        (binding?.recyclerView?.adapter as AnalysisDataAdapter).apply {
-            analysisModel?.let { model ->
-                binding?.winTeamTextView?.text = model.sumWin.toString()
-                binding?.loseTeamTextView?.text = model.sumLose.toString()
-                this.puuid = model.myPuuid
-                this.fragmentPosition = model.position
-                this.dataList = model.list
-                notifyDataSetChanged()
+            adapter = AnalysisDataAdapter().apply {
+                analysisModel?.let { model ->
+                    binding?.winTeamAverageTextView?.text = model.sumWin.toString()
+                    binding?.loseTeamAverageTextView?.text = model.sumLose.toString()
+                    this.puuid = model.myPuuid
+                    this.fragmentPosition = model.position
+                    this.dataList = model.list
+                }
             }
         }
     }

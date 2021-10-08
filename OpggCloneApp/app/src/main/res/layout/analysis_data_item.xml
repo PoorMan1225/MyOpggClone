@@ -21,8 +21,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/myCheckView"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +39,7 @@
         android:id="@+id/rankingBadgeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
+        android:textSize="8sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/championImageView"
         app:layout_constraintStart_toEndOf="@+id/guideline"
@@ -47,14 +47,22 @@
         tools:textColor="@color/black"
         tools:visibility="visible" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="60dp" />
+
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/black"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/rankingBadgeTextView"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="21" />
 
@@ -67,9 +75,12 @@
         android:max="100"
         android:progressDrawable="@drawable/rounded_progress_bar"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/scoreTextView"
         app:layout_constraintTop_toBottomOf="@+id/scoreTextView"
         tools:progress="50"
         tools:progressTint="@color/green" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

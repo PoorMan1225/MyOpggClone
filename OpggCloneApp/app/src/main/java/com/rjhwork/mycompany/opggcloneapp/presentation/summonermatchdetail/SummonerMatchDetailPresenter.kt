@@ -35,7 +35,10 @@ class SummonerMatchDetailPresenter(
                         matchData?.info?.gameCreation ?: 0,
                         matchData?.info?.gameDuration ?: 0
                     )
-                    val gameDuration = getGameDuration(matchData?.info?.gameDuration)
+                    val gameDuration = getGameDuration(
+                        matchData?.info?.gameStartTimestamp,
+                        matchData?.info?.gameEndTimestamp
+                    )
                     val averageTier: String = if (gameMode == "솔랭") {
                         view.showAverageTextView()
                         getAverageMatchTier(matchData)
@@ -79,10 +82,11 @@ class SummonerMatchDetailPresenter(
         return sumTierRankMMR.toRank()
     }
 
-    private fun getGameDuration(gameDuration: Int?): String {
-        if (gameDuration == null) {
+    private fun getGameDuration(gameStart: Long?, gameEnd: Long?): String {
+        if(gameStart == null || gameEnd == null) {
             return "00:00"
         }
+        val gameDuration = gameEnd - gameStart
         val minute = (gameDuration / 1000) / 60
         val second = (gameDuration / 1000) % 60
         return "${String.format("%02d", minute)}:${String.format("%02d", second)}"

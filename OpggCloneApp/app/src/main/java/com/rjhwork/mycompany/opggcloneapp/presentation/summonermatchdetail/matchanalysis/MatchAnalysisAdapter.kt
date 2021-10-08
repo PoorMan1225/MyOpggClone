@@ -1,6 +1,7 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
 import com.rjhwork.mycompany.opggcloneapp.domain.model.AnalysisModel
@@ -85,12 +86,12 @@ class MatchAnalysisAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
         val list = dataList.toMutableList()
 
         return when (position) {
-            0 -> list.sortedBy { it.kills ?: 0 }
-            1 -> list.sortedBy { it.goldEarned ?: 0 }
-            2 -> list.sortedBy { it.totalDamageDealtToChampions ?: 0 }
-            3 -> list.sortedBy { it.totalDamageShieldedOnTeammates ?: 0 }
-            4 -> list.sortedBy { it.totalMinionsKilled ?: 0 }
-            5 -> list.sortedBy { it.wardsPlaced ?: 0 }
+            0 -> list.sortedByDescending { it.kills ?: 0 }
+            1 -> list.sortedByDescending { it.goldEarned ?: 0 }
+            2 -> list.sortedByDescending { it.totalDamageDealtToChampions ?: 0 }
+            3 -> list.sortedByDescending { it.totalDamageShieldedOnTeammates ?: 0 }
+            4 -> list.sortedByDescending { it.totalMinionsKilled ?: 0 }
+            5 -> list.sortedByDescending { it.wardsPlaced ?: 0 }
             else -> emptyList()
         }
     }

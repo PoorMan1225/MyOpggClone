@@ -6,5 +6,6 @@ fun Int.gameMode(): String =
         430 -> "일반"
         440 -> "무작위 총력전"
         450 -> "자유 5:5 랭크"
+        900 -> "우르프"
         else -> "Unknown"
     }

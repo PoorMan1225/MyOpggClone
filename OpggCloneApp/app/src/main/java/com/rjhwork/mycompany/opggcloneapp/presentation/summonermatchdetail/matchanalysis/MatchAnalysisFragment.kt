@@ -1,23 +1,24 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rjhwork.mycompany.opggcloneapp.R
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
 import com.rjhwork.mycompany.opggcloneapp.databinding.FragmentMatchAnalysisBinding
+import com.rjhwork.mycompany.opggcloneapp.domain.model.PassData
 import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.SummonerMatchDetailActivity
 import org.koin.android.scope.ScopeFragment
 
-class MatchAnalysisFragment: ScopeFragment(), MatchAnalysisContract.View {
+class MatchAnalysisFragment : ScopeFragment(), MatchAnalysisContract.View {
 
     private var binding: FragmentMatchAnalysisBinding? = null
-
+    private var passData: PassData? = null
     override val presenter: MatchAnalysisContract.Presenter by inject()
 
     override fun onCreateView(
@@ -32,28 +33,41 @@ class MatchAnalysisFragment: ScopeFragment(), MatchAnalysisContract.View {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         bindViews()
-        presenter.onViewCreated(arguments?.getParcelable(SummonerMatchDetailActivity.PASS_DATA_KEY))
+        presenter.onViewCreated(passData)
     }
 
-    private fun initViews() = Unit
+    private fun initViews() {
+        passData = arguments?.getParcelable(SummonerMatchDetailActivity.PASS_DATA_KEY)
 
-    private fun bindViews() = Unit
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun setAdapterData(pair: Pair<String, Match?>) {
-        Log.d("MatchAnalysisFragment", "여기까진 왔습니다. ")
         repeat(6) {
             binding?.let {
                 it.tabLayout.addTab(it.tabLayout.newTab())
             }
         }
 
-        binding?.viewPager?.adapter = MatchAnalysisAdapter(this, ).apply {
+        passData?.let { data ->
+            binding?.tabLayout?.setSelectedTabIndicatorColor(
+                getWinLoseColor(data)
+            )
+            binding?.tabLayout?.setTabTextColors(
+                getColor(requireContext(), R.color.darker_gray),
+                getWinLoseColor(data)
+            )
+        }
+    }
+
+    private fun bindViews() = Unit
+
+    override fun setAdapterData(pair: Pair<String, Match?>) {
+        Log.d("MainActivity", "puuid: ${pair.first}")
+
+        binding?.viewPager?.adapter = MatchAnalysisAdapter(this).apply {
             this.pair = pair
         }
+
         binding?.let {
             TabLayoutMediator(it.tabLayout, it.viewPager) { tab, position ->
-                when(position) {
+                when (position) {
                     0 -> tab.text = getString(R.string.tab1)
                     1 -> tab.text = getString(R.string.tab2)
                     2 -> tab.text = getString(R.string.tab3)
@@ -64,6 +78,18 @@ class MatchAnalysisFragment: ScopeFragment(), MatchAnalysisContract.View {
             }.attach()
         }
     }
+
+    private fun getWinLoseColor(data: PassData) =
+        if (data.winLoseFlag)
+            getColor(
+                requireContext(),
+                R.color.win_background
+            ) else {
+            getColor(
+                requireContext(),
+                R.color.lose_background
+            )
+        }
 
     override fun showLoadingIndicator() {
         binding?.progressBar?.isVisible = true

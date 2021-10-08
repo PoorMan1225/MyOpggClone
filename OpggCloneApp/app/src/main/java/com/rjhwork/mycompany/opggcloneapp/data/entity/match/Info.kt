@@ -16,6 +16,8 @@ data class Info(
     val gameName: String? = null,
     @SerializedName("gameStartTimestamp")
     val gameStartTimestamp: Long? = null,
+    @SerializedName("gameEndTimestamp")
+    val gameEndTimestamp: Long? = null,
     @SerializedName("gameType")
     val gameType: String? = null,
     @SerializedName("gameVersion")

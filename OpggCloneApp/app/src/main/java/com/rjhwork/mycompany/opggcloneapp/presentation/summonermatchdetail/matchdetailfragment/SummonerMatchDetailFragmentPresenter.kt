@@ -170,10 +170,12 @@ class SummonerMatchDetailFragmentPresenter(
             val rank = sortedList[0]?.rank ?: "Error"
             val tier = sortedList[0]?.tier ?: "Error"
             "$tier $rank"
-        } else {
+        } else if(data.size == 1) {
             val rank = data[0]?.rank ?: "Error"
             val tier = data[0]?.tier ?: "Error"
             if (data[0]?.queueType == "RANKED_SOLO_5x5") "$tier $rank" else ""
+        } else {
+            ""
         }
 
     private fun getTimeAverageCs(gameDuration: String, participant: Participant): Float {

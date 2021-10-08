@@ -1,6 +1,7 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.matchanalysis.analysisfragment
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +14,15 @@ import com.rjhwork.mycompany.opggcloneapp.domain.model.BindAnalysisData
 import com.rjhwork.mycompany.opggcloneapp.extension.loadBoarderCircularImage
 import com.rjhwork.mycompany.opggcloneapp.extension.loadCircle
 import com.rjhwork.mycompany.opggcloneapp.util.DataDragonApi
+import java.text.DecimalFormat
 
 class AnalysisDataAdapter :
     RecyclerView.Adapter<AnalysisDataAdapter.ViewHolder>() {
 
-    var dataList:List<BindAnalysisData>? = null
+    var dataList: List<BindAnalysisData>? = null
     var puuid: String? = null
     var fragmentPosition: Int = -1
+    var df = DecimalFormat("###,###,###")
 
     inner class ViewHolder(val binding: AnalysisDataItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -41,7 +44,7 @@ class AnalysisDataAdapter :
                     binding.championImageView.loadBoarderCircularImage(
                         data.championName?.let { DataDragonApi.getChampionIconUrl(it) },
                         4f,
-                        getRankingColor()
+                        getColor(binding.root.context, getRankingColor())
                     )
                     setProgressData(adapterPosition)
                 }
@@ -61,10 +64,15 @@ class AnalysisDataAdapter :
 
     private fun ViewHolder.setMyBackgroundColor(adapterPosition: Int) {
         puuid?.let {
-            if(dataList?.get(adapterPosition)?.puuid == it) {
+            if (dataList?.get(adapterPosition)?.puuid == it) {
                 binding.myCheckView.visibility = View.VISIBLE
-                binding.itemLayout.setBackgroundColor(getColor(binding.root.context, R.color.light_green))
-            }else {
+                binding.itemLayout.setBackgroundColor(
+                    getColor(
+                        binding.root.context,
+                        R.color.light_green
+                    )
+                )
+            } else {
                 binding.myCheckView.visibility = View.INVISIBLE
                 binding.itemLayout.setBackgroundColor(getColor(binding.root.context, R.color.white))
             }
@@ -87,6 +95,7 @@ class AnalysisDataAdapter :
         condition: (BindAnalysisData) -> Int?
     ) {
         dataList?.let { it ->
+            binding.scoreTextView.text = df.format(condition(it[adapterPosition]) ?: 0)
             binding.progressBar.progressTintList = ColorStateList.valueOf(
                 if (it[adapterPosition].win == true) {
                     getColor(binding.root.context, R.color.win_background)
@@ -94,18 +103,25 @@ class AnalysisDataAdapter :
                     getColor(binding.root.context, R.color.lose_background)
                 }
             )
-            binding.progressBar.progress = (adapterPosition * 100) / (condition(it[0]) ?: 0)
+            val progress = condition(it[0])?.let { max ->
+                condition(it[adapterPosition])?.let { myValue ->
+                    if(max <= 0) 0 else (myValue * 100) / max
+                } ?: 0
+            } ?: 0
+
+            binding.progressBar.progress = progress
         } ?: kotlin.run {
+            binding.scoreTextView.text = "0"
             binding.progressBar.progress = 0
         }
     }
 
     private fun ViewHolder.getRankingColor() =
         when (adapterPosition) {
-            0 -> getColor(binding.root.context, R.color.gold_color)
-            1 -> getColor(binding.root.context, R.color.silver_color)
-            2 -> getColor(binding.root.context, R.color.bronze_color)
-            else -> getColor(binding.root.context, R.color.white)
+            0 -> R.color.gold_color
+            1 -> R.color.silver_color
+            2 -> R.color.bronze_color
+            else -> R.color.white
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

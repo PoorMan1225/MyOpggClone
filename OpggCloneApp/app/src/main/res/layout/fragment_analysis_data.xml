@@ -6,64 +6,80 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/winTeamTextView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        android:text="승리팀"
-        android:textColor="@color/win_background"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/loseTeamTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/winTeamAverageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/win_background"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/winTeamTextView"
-        app:layout_constraintStart_toStartOf="@+id/winTeamTextView"
-        app:layout_constraintTop_toBottomOf="@+id/winTeamTextView"
-        tools:text="6.6" />
-
-    <TextView
-        android:id="@+id/loseTeamTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:text="패배팀"
-        android:textColor="@color/lose_background"
-        android:textSize="12sp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/winTeamTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/loseTeamAverageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/lose_background"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/loseTeamTextView"
-        app:layout_constraintStart_toStartOf="@+id/loseTeamTextView"
-        app:layout_constraintTop_toBottomOf="@+id/loseTeamTextView"
-        tools:text="6.6" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/winTeamTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="승리팀"
+                android:textColor="@color/win_background"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/winTeamAverageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/win_background"
+                android:textSize="20sp"
+                tools:text="6.6" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/loseTeamTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="패배팀"
+                android:textColor="@color/lose_background"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/loseTeamAverageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/lose_background"
+                android:textSize="20sp"
+                tools:text="6.6" />
+        </LinearLayout>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loseTeamAverageTextView"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
         tools:listitem="@layout/analysis_data_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
