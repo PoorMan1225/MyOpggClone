@@ -5,6 +5,7 @@ import com.rjhwork.mycompany.opggcloneapp.data.api.RiotMatchApi
 import com.rjhwork.mycompany.opggcloneapp.data.entity.SummonerProfile
 import com.rjhwork.mycompany.opggcloneapp.data.entity.leaguedata.ProfileLeagueItem
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
+import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -25,7 +26,7 @@ class SummonerProfileRepoImpl(
             riotApi.getRequestSummonerPuuidProfile(puuid)
         }
 
-    override suspend fun getRequestMatchesList(puuid: String, start:Int): Response<List<String>> =
+    override suspend fun getRequestMatchesList(puuid: String, start: Int): Response<List<String>> =
         withContext(dispatchers) {
             riotMatchApi.getRequestSummonerMatches(puuid, start = start)
         }

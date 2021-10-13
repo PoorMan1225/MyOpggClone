@@ -67,7 +67,8 @@ val appModule = module {
     single { get<AppDatabase>().favoriteDao()}
 
     single<RiotApi> {
-        Retrofit.Builder().baseUrl(Url.RIOT_API_BASE_URL)
+        Retrofit.Builder()
+            .baseUrl(Url.RIOT_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(get())
             .build()
@@ -117,6 +118,11 @@ val domainModule = module {
     factory { GetFavoriteByName(get()) }
     factory { GetItemsData() }
     factory { GetMatchDataDetail(get(),get(),get(),get(),get(),get(),get(),get()) }
+
+    // ranking Data
+    factory { GetChallengerRankingData(get()) }
+    factory { GetGrandMasterRankingData(get()) }
+    factory { GetMasterRankingData(get()) }
 }
 
 val dataModule = module {
@@ -125,6 +131,7 @@ val dataModule = module {
     single<SummonerProfileRepo> { SummonerProfileRepoImpl(get(), get(), get())}
     single<FavoriteRepo> { FavoriteRepoImpl(get(),get())}
     single<MatchDataRepo> { MatchDataImpl(get(),get())}
+    single<RankingDataRepo> { RankingDataRepoImpl(get(), get())}
 }
 
 val presenterModule = module {

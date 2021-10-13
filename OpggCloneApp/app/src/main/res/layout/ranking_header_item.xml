@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/divideView1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/white_gray_3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sharpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="#"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/divideView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divideView1" />
+
+    <TextView
+        android:id="@+id/summonerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="소환사"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/divideView2"
+        app:layout_constraintStart_toEndOf="@+id/sharpTextView"
+        app:layout_constraintTop_toBottomOf="@+id/divideView1" />
+
+    <TextView
+        android:id="@+id/tierTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="티어"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/divideTierTextView"
+        app:layout_constraintBottom_toTopOf="@+id/divideView2"
+        app:layout_constraintTop_toBottomOf="@+id/divideView1" />
+
+    <TextView
+        android:id="@+id/divideTierTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="/"
+        android:textColor="@color/darker_gray"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/lpTextView"
+        app:layout_constraintBottom_toTopOf="@+id/divideView2"
+        app:layout_constraintTop_toBottomOf="@+id/divideView1" />
+
+    <TextView
+        android:id="@+id/lpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="LP"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divideView2"
+        app:layout_constraintTop_toBottomOf="@+id/divideView1" />
+
+    <View
+        android:id="@+id/divideView2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/white_gray_3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

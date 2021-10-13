@@ -12,6 +12,9 @@
         tools:layout="@layout/fragment_search"
         >
 
+        <action
+            android:id="@+id/action_search_dest_to_ranking_dest"
+            app:destination="@id/ranking_dest" />
     </fragment>
 
     <fragment
