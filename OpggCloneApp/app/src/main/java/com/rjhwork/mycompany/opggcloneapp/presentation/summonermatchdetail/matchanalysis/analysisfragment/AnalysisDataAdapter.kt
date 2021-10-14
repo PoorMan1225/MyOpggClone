@@ -22,7 +22,7 @@ class AnalysisDataAdapter :
     var dataList: List<BindAnalysisData>? = null
     var puuid: String? = null
     var fragmentPosition: Int = -1
-    var df = DecimalFormat("###,###,###")
+    private var df = DecimalFormat("###,###,###")
 
     inner class ViewHolder(val binding: AnalysisDataItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

@@ -1,18 +1,22 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.ranking
 
+import android.util.Log
+import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingResponse
+import com.rjhwork.mycompany.opggcloneapp.domain.model.RankingModel
 import com.rjhwork.mycompany.opggcloneapp.domain.usecase.GetChallengerRankingData
 import com.rjhwork.mycompany.opggcloneapp.domain.usecase.GetGrandMasterRankingData
 import com.rjhwork.mycompany.opggcloneapp.domain.usecase.GetMasterRankingData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.util.Comparator
 
 class RankingPresenter(
     private var view: RankingContract.View,
     private val getChallengerRankingData: GetChallengerRankingData,
     private val getGrandMasterRankingData: GetGrandMasterRankingData,
     private val getMasterRankingData: GetMasterRankingData
-): RankingContract.Presenter {
+) : RankingContract.Presenter {
 
     override var scope: CoroutineScope = MainScope()
     var count = 1
@@ -23,15 +27,19 @@ class RankingPresenter(
 
     private fun fetchDataList() {
         scope.launch {
-            try{
+            try {
                 view.showLoadingIndicator()
                 val list = getChallengerRankingData.invoke()
-                list?.let {
-                    view.fetchRankingData(it, count)
+                Log.d("RankingFragment", list?.name.toString())
+                list?.let { response ->
+                    response
+                        .run(::getRankingList)
+                        .run(::getSortedList)
+                        .run { view.fetchRankingData(this) }
                 }
-            }catch (e:Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
-            }finally {
+            } finally {
                 view.dismissLoadingIndicator()
             }
         }
@@ -42,8 +50,14 @@ class RankingPresenter(
             when (count) {
                 1 -> getDataProcess()
                 2 -> getDataProcess()
+                else -> view.noDataRankingList()
             }
         }
+    }
+
+    private fun getSortedList(list: List<RankingModel>?): List<RankingModel>? {
+        Log.d("RankingFragment", "getSortedList")
+        return list?.sortedWith(RankingComparator)
     }
 
     private suspend fun getDataProcess() {
@@ -54,8 +68,11 @@ class RankingPresenter(
                 3 -> getMasterRankingData.invoke()
                 else -> return
             }
-            list?.let {
-                view.addRankingList(it, count)
+            list?.let { response ->
+                response
+                    .run(::getRankingList)
+                    .run(::getSortedList)
+                    .run { view.addRankingList(this) }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -63,7 +80,39 @@ class RankingPresenter(
         }
     }
 
+    private fun getRankingList(response: RankingResponse): List<RankingModel>? {
+        Log.d("RankingFragment", "getRankingList")
+        val list = response.entries?.map { entity ->
+            RankingModel(
+                freshBlood = entity.freshBlood,
+                hotStreak = entity.hotStreak,
+                inactive = entity.inactive,
+                leaguePoints = entity.leaguePoints,
+                losses = entity.losses,
+                rank = entity.rank,
+                summonerName = entity.summonerName,
+                summonerId = entity.summonerId,
+                veteran = entity.veteran,
+                wins = entity.wins,
+                tier = response.tier,
+                count = count
+            )
+        }
+        return list
+    }
 
     override fun onDestroyView() {}
 
+    object RankingComparator : Comparator<RankingModel> {
+        override fun compare(o1: RankingModel, o2: RankingModel): Int {
+            val first = o1.leaguePoints
+            val second = o2.leaguePoints
+            return if (first != null && second != null)
+                when {
+                    first < second -> 1
+                    else -> -1
+                }
+            else 0
+        }
+    }
 }

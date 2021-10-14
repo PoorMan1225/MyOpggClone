@@ -2,6 +2,7 @@ package com.rjhwork.mycompany.opggcloneapp.presentation.ranking
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
 import com.rjhwork.mycompany.opggcloneapp.databinding.FragmentRankingBinding
-import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchAdapter
+import com.rjhwork.mycompany.opggcloneapp.domain.model.RankingModel
 import org.koin.android.scope.ScopeFragment
 
 class RankingFragment : ScopeFragment(), RankingContract.View {
@@ -33,12 +34,14 @@ class RankingFragment : ScopeFragment(), RankingContract.View {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         bindViews()
+        presenter.onViewCreated()
     }
 
     private fun initViews() {
         binding?.recyclerView?.apply {
             addItemDecoration(DividerItemDecoration(this.context, 1))
             layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
+            adapter = RankingAdapter()
         }
     }
 
@@ -53,6 +56,7 @@ class RankingFragment : ScopeFragment(), RankingContract.View {
                         == ((binding?.recyclerView?.adapter as RankingAdapter).data.size - 1)
                     ) {
                         showViewHolderProgress()
+                        presenter.showMoreRankingData()
                         isLoading = true
                     }
                 }
@@ -69,27 +73,37 @@ class RankingFragment : ScopeFragment(), RankingContract.View {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun addRankingList(list: List<RankingEntity>, count: Int) {
+    override fun addRankingList(list: List<RankingModel>?) {
         (binding?.recyclerView?.adapter as RankingAdapter).apply {
             data.removeAt(data.size - 1)
             notifyItemRemoved(data.size)
-            data.addAll(list.map { RankingAdapter.DataItem(count to it) })
+            val rankingModels = list?.map { RankingAdapter.DataItem(it) }
+            rankingModels?.let { data.addAll(it) }
             notifyDataSetChanged()
             isLoading = false
         }
     }
 
+    override fun noDataRankingList() {
+        (binding?.recyclerView?.adapter as RankingAdapter).apply {
+            data.removeAt(data.size - 1)
+            notifyItemRemoved(data.size)
+            isLoading = false
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    override fun fetchRankingData(dataList: List<RankingEntity>, count: Int) {
+    override fun fetchRankingData(dataList: List<RankingModel>?) {
         val list = mutableListOf<RankingAdapter.DataItem>()
 
         list.apply {
-            add(RankingAdapter.DataItem("타이틀"))
-            addAll(dataList.map { RankingAdapter.DataItem(count to it) })
+            add(RankingAdapter.DataItem("헤더"))
+            val rankingModels = dataList?.map { RankingAdapter.DataItem(it) }
+            rankingModels?.let { addAll(it) }
         }
 
-        (binding?.recyclerView?.adapter as RankingAdapter).apply {
-            data = list
+        (binding?.recyclerView?.adapter as? RankingAdapter)?.apply {
+            this.data = list
             notifyDataSetChanged()
         }
     }

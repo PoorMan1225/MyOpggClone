@@ -5,7 +5,6 @@ import com.rjhwork.mycompany.opggcloneapp.data.api.RiotMatchApi
 import com.rjhwork.mycompany.opggcloneapp.data.entity.SummonerProfile
 import com.rjhwork.mycompany.opggcloneapp.data.entity.leaguedata.ProfileLeagueItem
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
-import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response

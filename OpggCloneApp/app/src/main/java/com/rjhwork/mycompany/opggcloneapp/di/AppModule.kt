@@ -17,6 +17,9 @@ import com.rjhwork.mycompany.opggcloneapp.presentation.addsummoner.AddSummonerPr
 import com.rjhwork.mycompany.opggcloneapp.presentation.favorite.FavoriteContract
 import com.rjhwork.mycompany.opggcloneapp.presentation.favorite.FavoritePresenter
 import com.rjhwork.mycompany.opggcloneapp.presentation.favorite.FavoritesActivity
+import com.rjhwork.mycompany.opggcloneapp.presentation.ranking.RankingContract
+import com.rjhwork.mycompany.opggcloneapp.presentation.ranking.RankingFragment
+import com.rjhwork.mycompany.opggcloneapp.presentation.ranking.RankingPresenter
 import com.rjhwork.mycompany.opggcloneapp.presentation.search.SearchContract
 import com.rjhwork.mycompany.opggcloneapp.presentation.search.SearchFragment
 import com.rjhwork.mycompany.opggcloneapp.presentation.search.SearchPresenter
@@ -172,6 +175,12 @@ val presenterModule = module {
     scope<MatchAnalysisFragment> {
         scoped<MatchAnalysisContract.Presenter> {
             MatchAnalysisPresenter(get(),get())
+        }
+    }
+
+    scope<RankingFragment> {
+        scoped<RankingContract.Presenter> {
+            RankingPresenter(get(), get(), get(), get())
         }
     }
 

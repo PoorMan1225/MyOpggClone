@@ -3,7 +3,7 @@ package com.rjhwork.mycompany.opggcloneapp.data.api
 import com.rjhwork.mycompany.opggcloneapp.BuildConfig
 import com.rjhwork.mycompany.opggcloneapp.data.entity.SummonerProfile
 import com.rjhwork.mycompany.opggcloneapp.data.entity.leaguedata.ProfileLeagueItem
-import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
+import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,19 +26,19 @@ interface RiotApi {
         @Path("summonerId") summonerId: String
     ): Response<List<ProfileLeagueItem>>
 
-    @GET("lol/league-exp/v4/entries/RANKED_SOLO_5x5/{tier}/{division}")
+    @GET("lol/league-exp/v4/entries/RANKED_SOLO_5x5/{tier}/{division}?api_key=${BuildConfig.RIOT_API_KEY}")
     suspend fun getRankingData(
         @Path("tier") tier:String,
         @Path("division") division:String,
         @Query("page") page:Int,
-    ): Response<List<RankingEntity>>
+    ): Response<RankingResponse>
 
     @GET("lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5?api_key=${BuildConfig.RIOT_API_KEY}")
-    suspend fun getChallengerRankingData(): Response<List<RankingEntity>>
+    suspend fun getChallengerRankingData(): Response<RankingResponse>
 
-    @GET("lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5")
-    suspend fun getGrandMasterRankingData(): Response<List<RankingEntity>>
+    @GET("lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5?api_key=${BuildConfig.RIOT_API_KEY}")
+    suspend fun getGrandMasterRankingData(): Response<RankingResponse>
 
-    @GET("lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5")
-    suspend fun getMasterRankingData(): Response<List<RankingEntity>>
+    @GET("lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5?api_key=${BuildConfig.RIOT_API_KEY}")
+    suspend fun getMasterRankingData(): Response<RankingResponse>
 }

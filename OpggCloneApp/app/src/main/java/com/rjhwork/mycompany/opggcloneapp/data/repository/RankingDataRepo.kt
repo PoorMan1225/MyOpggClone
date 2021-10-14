@@ -1,12 +1,12 @@
 package com.rjhwork.mycompany.opggcloneapp.data.repository
 
-import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
+import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingResponse
 
 interface RankingDataRepo {
 
-    suspend fun getChallengerRankingData(): List<RankingEntity>?
+    suspend fun getChallengerRankingData(): RankingResponse?
 
-    suspend fun getGrandMasterRankingData(): List<RankingEntity>?
+    suspend fun getGrandMasterRankingData(): RankingResponse?
 
-    suspend fun getMasterRankingData(): List<RankingEntity>?
+    suspend fun getMasterRankingData(): RankingResponse?
 }

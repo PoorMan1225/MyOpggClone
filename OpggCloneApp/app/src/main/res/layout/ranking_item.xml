@@ -17,15 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
 
-    <ImageView
-        android:id="@+id/summonerIconImageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rankingTextView"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/summonerNameTextView"
         android:layout_width="wrap_content"
@@ -33,7 +24,7 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/summonerIconImageView"
+        app:layout_constraintStart_toEndOf="@+id/rankingTextView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="갱붕이" />
 
@@ -42,9 +33,14 @@
         android:layout_width="18dp"
         android:layout_height="16dp"
         android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="8sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/lpTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/lpTextView"

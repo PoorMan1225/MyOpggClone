@@ -5,29 +5,23 @@ import com.google.gson.annotations.SerializedName
 
 data class RankingEntity(
     @SerializedName("freshBlood")
-    val freshBlood: Boolean? = null,
+    val freshBlood: Boolean?,
     @SerializedName("hotStreak")
-    val hotStreak: Boolean? = null,
+    val hotStreak: Boolean?,
     @SerializedName("inactive")
-    val inactive: Boolean? = null,
-    @SerializedName("leagueId")
-    val leagueId: String? = null,
+    val inactive: Boolean?,
     @SerializedName("leaguePoints")
-    val leaguePoints: Int? = null,
+    val leaguePoints: Int?,
     @SerializedName("losses")
-    val losses: Int? = null,
-    @SerializedName("queueType")
-    val queueType: String? = null,
+    val losses: Int?,
     @SerializedName("rank")
-    val rank: String? = null,
+    val rank: String?,
     @SerializedName("summonerId")
-    val summonerId: String? = null,
+    val summonerId: String?,
     @SerializedName("summonerName")
-    val summonerName: String? = null,
-    @SerializedName("tier")
-    val tier: String? = null,
+    val summonerName: String?,
     @SerializedName("veteran")
-    val veteran: Boolean? = null,
+    val veteran: Boolean?,
     @SerializedName("wins")
-    val wins: Int? = null
+    val wins: Int?
 )

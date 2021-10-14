@@ -6,25 +6,26 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.rjhwork.mycompany.opggcloneapp.R
-import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
 import com.rjhwork.mycompany.opggcloneapp.databinding.LoadingItemBinding
 import com.rjhwork.mycompany.opggcloneapp.databinding.RankingHeaderItemBinding
 import com.rjhwork.mycompany.opggcloneapp.databinding.RankingItemBinding
-import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchAdapter
+import com.rjhwork.mycompany.opggcloneapp.domain.model.RankingModel
+import java.text.DecimalFormat
 
 class RankingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data = mutableListOf<DataItem>()
+    private var df = DecimalFormat("###,###,###")
 
     inner class RankingViewHolder(private val binding: RankingItemBinding) : RecyclerView.ViewHolder(binding.root) {
          @SuppressLint("SetTextI18n")
          fun bind(item: Any) {
-             (item as Pair<*, *>)
-             binding.summonerNameTextView.text = (item.second as RankingEntity).summonerName
-             binding.lpTextView.text = "${(item.second as RankingEntity).leaguePoints}LP"
+             (item as RankingModel)
+             binding.summonerNameTextView.text = item.summonerName
+             binding.lpTextView.text = "${df.format(item.leaguePoints)}LP"
              binding.rankingTextView.text = adapterPosition.toString()
 
-             val tierText = getTierText(item.first as Int)
+             val tierText = getTierText(item.count)
              if(tierText.isNotEmpty()) {
                  binding.tierBadgeTextView.setBadgeTextColor(tierText, R.color.master_color)
              }
@@ -78,25 +79,21 @@ class RankingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val itemValue = data[position].value
         when {
             holder is HeaderViewHolder && itemValue is String -> Unit
-            holder is RankingViewHolder && itemValue is RankingEntity -> {
-                holder.bind(itemValue)
-            }
+            holder is RankingViewHolder && itemValue is RankingModel -> holder.bind(itemValue)
+            holder is LoadingViewHolder && itemValue == null -> holder.bind()
             else -> throw Exception("RankingAdapter : 올 수 없는 뷰홀더")
         }
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun getItemViewType(position: Int): Int =
-        when (data[position].value) {
-            is String -> {
-                RANKING_HEADER_ITEM
-            }
-            is Pair<*, *> -> {
-                RANKING_ITEM
-            }
+    override fun getItemViewType(position: Int): Int {
+        return when (data[position].value) {
+            is String -> RANKING_HEADER_ITEM
+            is RankingModel -> RANKING_ITEM
             else -> VIEW_TYPE_LOADING
         }
+    }
 
     private fun getTierText(tierCount: Int): String {
         return when (tierCount) {

@@ -35,9 +35,7 @@ class SearchPresenter(
 
     init {
         getTrackingFavoriteData()
-            .onEach {
-                fetchFavoriteData()
-            }
+            .onEach { fetchFavoriteData() }
             .launchIn(scope)
     }
 

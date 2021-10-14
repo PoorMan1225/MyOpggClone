@@ -3,8 +3,6 @@ package com.rjhwork.mycompany.opggcloneapp.data.repository
 import com.rjhwork.mycompany.opggcloneapp.data.entity.SummonerProfile
 import com.rjhwork.mycompany.opggcloneapp.data.entity.leaguedata.ProfileLeagueItem
 import com.rjhwork.mycompany.opggcloneapp.data.entity.match.Match
-import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
-import okhttp3.ResponseBody
 import retrofit2.Response
 
 interface SummonerProfileRepo {
