@@ -15,21 +15,29 @@ import java.text.DecimalFormat
 class RankingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data = mutableListOf<DataItem>()
+    lateinit var rankingItemListener: (String) -> Unit
     private var df = DecimalFormat("###,###,###")
 
-    inner class RankingViewHolder(private val binding: RankingItemBinding) : RecyclerView.ViewHolder(binding.root) {
-         @SuppressLint("SetTextI18n")
-         fun bind(item: Any) {
-             (item as RankingModel)
-             binding.summonerNameTextView.text = item.summonerName
-             binding.lpTextView.text = "${df.format(item.leaguePoints)}LP"
-             binding.rankingTextView.text = adapterPosition.toString()
+    inner class RankingViewHolder(private val binding: RankingItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
+        fun bind(item: Any) {
+            (item as RankingModel)
+            binding.summonerNameTextView.text = item.summonerName ?: ""
+            binding.lpTextView.text = "${df.format(item.leaguePoints)}LP"
+            binding.rankingTextView.text = adapterPosition.toString()
 
-             val tierText = getTierText(item.count)
-             if(tierText.isNotEmpty()) {
-                 binding.tierBadgeTextView.setBadgeTextColor(tierText, R.color.master_color)
-             }
-         }
+            val tierText = getTierText(item.count)
+            if (tierText.isNotEmpty()) {
+                binding.tierBadgeTextView.setBadgeTextColor(tierText, R.color.master_color)
+            }
+
+            binding.rankingLayout.setOnClickListener {
+                item.summonerName?.let {
+                    rankingItemListener.invoke(it)
+                }
+            }
+        }
     }
 
     inner class HeaderViewHolder(private val binding: RankingHeaderItemBinding) :

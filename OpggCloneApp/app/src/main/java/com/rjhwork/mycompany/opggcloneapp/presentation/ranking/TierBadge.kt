@@ -6,9 +6,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.view.Gravity
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.widget.TextViewCompat
 import com.rjhwork.mycompany.opggcloneapp.extension.dip
 
 class TierBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTextView(context, attrs) {
@@ -26,6 +29,7 @@ class TierBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTextVi
             verticalPadding
         )
         setTextColor(Color.WHITE)
+        textAlignment = TEXT_ALIGNMENT_CENTER
     }
 
     override fun onDraw(canvas: Canvas?) {

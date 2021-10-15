@@ -102,7 +102,8 @@ class FavoritePresenter(
                     rank = profileLeagueItem?.tier
                 ),
                 summonerLevel = summonerProfile.summonerLevel?.toString(),
-                summonerPuuid = summonerProfile.puuid
+                summonerPuuid = summonerProfile.puuid,
+                isFavorite = true
             )
             insertFavoriteData.invoke(favoriteEntity)
             view.startToMatchListActivityWithAnimation(favoriteEntity)

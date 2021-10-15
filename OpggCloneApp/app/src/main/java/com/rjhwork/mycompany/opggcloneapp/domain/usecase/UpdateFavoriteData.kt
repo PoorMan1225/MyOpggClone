@@ -9,6 +9,9 @@ class UpdateFavoriteData(
 ) {
 
     suspend operator fun invoke(favoriteEntity: FavoriteEntity) {
-        favoriteRepo.updateFavorite(favoriteEntity.isFavorite.not(), favoriteEntity.summonerName)
+        if(favoriteEntity.isFavorite == null) {
+            return
+        }
+        favoriteRepo.updateFavorite(favoriteEntity.isFavorite!!.not(), favoriteEntity.summonerName)
     }
 }

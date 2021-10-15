@@ -14,7 +14,7 @@ data class FavoriteEntity(
     val summonerPuuid: String?,
     val summonerIcon: String?,
     val summonerLevel: String?,
-    var isFavorite: Boolean = false,
+    var isFavorite: Boolean?,
     @Embedded
     val profileRank: FavoriteRankEntity? = null
 ): Parcelable

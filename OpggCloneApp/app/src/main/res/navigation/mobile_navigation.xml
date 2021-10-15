@@ -18,18 +18,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/community_dest"
-        android:name="com.rjhwork.mycompany.opggcloneapp.presentation.community.CommunityFragment"
-        android:label="커뮤니티"
-        tools:layout="@layout/fragment_community"
-        >
-
-    </fragment>
-
-    <fragment
         android:id="@+id/ranking_dest"
         android:name="com.rjhwork.mycompany.opggcloneapp.presentation.ranking.RankingFragment"
         android:label="랭킹">
-
     </fragment>
 </navigation>

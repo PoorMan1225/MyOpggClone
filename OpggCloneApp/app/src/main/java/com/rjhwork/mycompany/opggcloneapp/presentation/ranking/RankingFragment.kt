@@ -10,9 +10,13 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.rjhwork.mycompany.opggcloneapp.R
+import com.rjhwork.mycompany.opggcloneapp.data.entity.favorite.FavoriteEntity
 import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingEntity
 import com.rjhwork.mycompany.opggcloneapp.databinding.FragmentRankingBinding
 import com.rjhwork.mycompany.opggcloneapp.domain.model.RankingModel
+import com.rjhwork.mycompany.opggcloneapp.presentation.MainActivity
+import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch.SummonerMatchActivity
 import org.koin.android.scope.ScopeFragment
 
 class RankingFragment : ScopeFragment(), RankingContract.View {
@@ -106,6 +110,10 @@ class RankingFragment : ScopeFragment(), RankingContract.View {
             this.data = list
             notifyDataSetChanged()
         }
+
+        (binding?.recyclerView?.adapter as? RankingAdapter)?.rankingItemListener = { summonerName ->
+            presenter.getFavoriteBySummonerName(summonerName)
+        }
     }
 
     override fun showLoadingIndicator() {
@@ -114,5 +122,13 @@ class RankingFragment : ScopeFragment(), RankingContract.View {
 
     override fun dismissLoadingIndicator() {
         binding?.progressBar?.isVisible = false
+    }
+
+    override fun startMatchActivityWithAnimation(favoriteEntity: FavoriteEntity, value: String?) {
+        startActivity(SummonerMatchActivity.newIntent(requireContext(), favoriteEntity, value))
+        (context as MainActivity).overridePendingTransition(
+            R.anim.sliding_left_and_fade_out,
+            R.anim.sliding_left_and_fade_out_stay
+        )
     }
 }

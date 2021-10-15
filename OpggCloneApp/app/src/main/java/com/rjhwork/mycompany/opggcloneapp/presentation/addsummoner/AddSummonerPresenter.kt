@@ -71,7 +71,8 @@ class AddSummonerPresenter(
                         rank = profileLeagueItem?.tier
                     ),
                     summonerLevel = summonerProfile.summonerLevel?.toString(),
-                    summonerPuuid = summonerProfile.puuid
+                    summonerPuuid = summonerProfile.puuid,
+                    isFavorite = null
                 )
             )
         }

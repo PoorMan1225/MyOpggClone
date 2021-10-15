@@ -90,10 +90,12 @@ class SearchFragment : ScopeFragment(), SearchContract.View {
             startActivity(Intent(context, FavoritesActivity::class.java))
             (context as MainActivity).overridePendingTransition(R.anim.sliding_up, R.anim.stay)
         }
-        (binding?.favoriteRecyclerView?.adapter as SearchAdapter).favoriteClickListener = {
+        (binding?.favoriteRecyclerView?.adapter as SearchAdapter).favoriteClickListener = { favorite ->
             startMatchActivityWithAnimation(
-                favoriteEntity = it,
-                value = if (it.isFavorite) "true" else "false"
+                favoriteEntity = favorite,
+                value = favorite.isFavorite?.let {
+                    if (it) "true" else "false"
+                }
             )
         }
     }

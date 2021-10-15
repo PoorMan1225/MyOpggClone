@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
@@ -67,10 +68,6 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
                 R.anim.sliding_right_and_fade_out
             )
         }
-        binding.favoriteImageView.setOnClickListener {
-            presenter.updateFavoriteData(favoriteEntity)
-            favoriteEntity.isFavorite = favoriteEntity.isFavorite.not()
-        }
 
         binding.refreshLayout.setOnClickListener {
             presenter.showRefreshList(favoriteEntity)
@@ -97,7 +94,12 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
         })
 
         (binding.recyclerView.adapter as SummonerMatchAdapter).detailDataCallback = { passData ->
-            startActivity(SummonerMatchDetailActivity.newIntent(this@SummonerMatchActivity, passData))
+            startActivity(
+                SummonerMatchDetailActivity.newIntent(
+                    this@SummonerMatchActivity,
+                    passData
+                )
+            )
             overridePendingTransition(
                 R.anim.sliding_left_and_fade_out,
                 R.anim.sliding_left_and_fade_out_stay
@@ -112,7 +114,6 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
                 LinearLayoutManager(this@SummonerMatchActivity, RecyclerView.VERTICAL, false)
             adapter = SummonerMatchAdapter()
         }
-        binding.favoriteImageView.isEnabled = false
 
         binding.rankRecyclerView.apply {
             layoutManager =
@@ -160,12 +161,21 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
         binding.profileLevelTextView.background =
             ResourcesCompat.getDrawable(resources, R.drawable.shape_rectangle_corner_black, null)
         binding.profileLevelTextView.text = favoriteEntity.summonerLevel
-        binding.favoriteImageView.isEnabled = true
+        binding.favoriteImageView.visibility = if(value == null) {
+            View.INVISIBLE
+        } else {
+            View.VISIBLE
+        }
         binding.refreshLayout.isVisible = true
         setFavoriteImageView(value)
+
+        binding.favoriteImageView.setOnClickListener {
+            showFavoriteDeleteDialog(this@SummonerMatchActivity.favoriteEntity)
+        }
     }
 
     override fun setFavoriteImageView(value: String?) {
+        if(value == null) return
         binding.favoriteImageView.setImageDrawable(
             when (value) {
                 "true" -> ResourcesCompat.getDrawable(
@@ -254,18 +264,24 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
     }
 
     override fun showFavoriteDeleteDialog(favoriteEntity: FavoriteEntity) {
-        if (favoriteEntity.isFavorite) {
-            AlertDialog.Builder(this)
-                .setTitle("즐겨찾기에서 삭제하시겠습니까?")
-                .setPositiveButton("완료") { _, _ ->
-                    presenter.updateFavoriteData(favoriteEntity)
-                }.setNegativeButton("취소") { _, _ -> }
-                .setCancelable(false)
-                // 다이얼로그 취소 금지. 다른데 누르거나 백프래스 눌러도 안꺼짐
-                .show()
-        } else {
-            presenter.updateFavoriteData(favoriteEntity)
-            Toast.makeText(this, "즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+        favoriteEntity.isFavorite?.let {
+            if (it) {
+                AlertDialog.Builder(this)
+                    .setTitle("즐겨찾기에서 삭제하시겠습니까?")
+                    .setPositiveButton("완료") { _, _ ->
+                        this.favoriteEntity.isFavorite = this.favoriteEntity.isFavorite?.not()
+                        presenter.updateFavoriteData(this.favoriteEntity)
+                    }.setNegativeButton("취소") { _, _ -> }
+                    .setCancelable(false)
+                    // 다이얼로그 취소 금지. 다른데 누르거나 백프래스 눌러도 안꺼짐
+                    .show()
+            } else {
+                this.favoriteEntity.isFavorite = this.favoriteEntity.isFavorite?.not()
+                presenter.updateFavoriteData(this.favoriteEntity)
+                Toast.makeText(this, "즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        } ?: kotlin.run {
+            return
         }
     }
 

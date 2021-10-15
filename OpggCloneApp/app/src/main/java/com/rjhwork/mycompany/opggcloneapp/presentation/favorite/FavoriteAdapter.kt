@@ -29,7 +29,7 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
     lateinit var favoriteClickListener: (FavoriteEntity) -> Unit
     lateinit var deleteClickListener: (FavoriteEntity) -> Unit
     var buttonEventCallBack: (() -> Int)? = null
-    lateinit var rootClickListener: (Pair<FavoriteEntity, String>) -> Unit
+    lateinit var rootClickListener: (Pair<FavoriteEntity, String?>) -> Unit
 
     inner class ViewHolder(private val binding: FavoriteItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -62,7 +62,6 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
             binding.deleteImageView.setOnClickListener {
                 deleteClickListener.invoke(favorite)
             }
-
             buttonEventCallBack?.invoke()?.let {
                 if(it == DOWN_UP_ANIMATION) {
                     setAnimation(binding.root)
@@ -72,7 +71,11 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
                 if(binding.favoriteImageView.visibility == View.GONE) {
                     rootClickListener.invoke(favorite to "null")
                 }else {
-                    rootClickListener.invoke(favorite to if(favorite.isFavorite) "true" else "false")
+                    rootClickListener.invoke(favorite to
+                            favorite.isFavorite?.let {
+                                if(it) "true" else "false"
+                            }
+                    )
                 }
             }
         }
@@ -80,17 +83,16 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>() {
         private fun bindFavoriteImage(favorite: FavoriteEntity) {
             val sp = binding.root.context.getSharedPreferences("preference", Activity.MODE_PRIVATE)
             SharedPreferenceManager(sp).apply {
-                val name = getSummonerProfile(SUMMONER_PROFILE_KEY)?.name
-                if (name == favorite.summonerName) {
-                    binding.favoriteImageView.isVisible = false
-                } else {
+                favorite.isFavorite?.let {
                     binding.favoriteImageView.isVisible = true
                     binding.favoriteImageView.setImageDrawable(
-                        if (favorite.isFavorite)
+                        if (it)
                             getDrawable(binding.root.context, R.drawable.ic_baseline_star_24)
                         else
                             getDrawable(binding.root.context, R.drawable.ic_baseline_star_border_24)
                     )
+                } ?: kotlin.run {
+                    binding.favoriteImageView.isVisible = false
                 }
             }
         }

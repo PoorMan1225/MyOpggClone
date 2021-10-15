@@ -180,8 +180,7 @@ val presenterModule = module {
 
     scope<RankingFragment> {
         scoped<RankingContract.Presenter> {
-            RankingPresenter(get(), get(), get(), get())
+            RankingPresenter(get(), get(), get(), get(), get(), get())
         }
     }
-
 }

@@ -41,10 +41,8 @@ class FavoritesActivity : ScopeActivity(), FavoriteContract.View {
     }
 
     private fun bindViews() {
-        (binding.recyclerView.adapter as FavoriteAdapter).favoriteClickListener =
-            { favoriteEntity ->
-                (binding.recyclerView.adapter as FavoriteAdapter).buttonEventCallBack =
-                    { DEFAULT_ANIMATION }
+        (binding.recyclerView.adapter as FavoriteAdapter).favoriteClickListener = { favoriteEntity ->
+                (binding.recyclerView.adapter as FavoriteAdapter).buttonEventCallBack = { DEFAULT_ANIMATION }
                 showFavoriteDeleteDialog(favoriteEntity)
             }
 
@@ -116,7 +114,9 @@ class FavoritesActivity : ScopeActivity(), FavoriteContract.View {
             SummonerMatchActivity.newIntent(
                 this@FavoritesActivity,
                 favoriteEntity,
-                if (favoriteEntity.isFavorite) "true" else "false"
+                favoriteEntity.isFavorite?.let {
+                    if (it) "true" else "false"
+                }
             )
         )
         overridePendingTransition(
@@ -141,17 +141,21 @@ class FavoritesActivity : ScopeActivity(), FavoriteContract.View {
     }
 
     override fun showFavoriteDeleteDialog(favoriteEntity: FavoriteEntity) {
-        if (favoriteEntity.isFavorite) {
-            AlertDialog.Builder(this)
-                .setTitle("즐겨찾기에서 삭제하시겠습니까?")
-                .setPositiveButton("완료") { _, _ ->
-                    presenter.updateFavoriteData(favoriteEntity)
-                }.setNegativeButton("취소") { _, _ -> }
-                .setCancelable(false)
-                // 다이얼로그 취소 금지. 다른데 누르거나 백프래스 눌러도 안꺼짐
-                .show()
-        } else {
-            presenter.updateFavoriteData(favoriteEntity)
+        favoriteEntity.isFavorite?.let {
+            if (it) {
+                AlertDialog.Builder(this)
+                    .setTitle("즐겨찾기에서 삭제하시겠습니까?")
+                    .setPositiveButton("완료") { _, _ ->
+                        presenter.updateFavoriteData(favoriteEntity)
+                    }.setNegativeButton("취소") { _, _ -> }
+                    .setCancelable(false)
+                    // 다이얼로그 취소 금지. 다른데 누르거나 백프래스 눌러도 안꺼짐
+                    .show()
+            } else {
+                presenter.updateFavoriteData(favoriteEntity)
+            }
+        } ?: kotlin.run {
+            return
         }
     }
 

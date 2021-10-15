@@ -1,25 +1,27 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.ranking
 
 import android.util.Log
+import com.rjhwork.mycompany.opggcloneapp.data.entity.favorite.FavoriteEntity
 import com.rjhwork.mycompany.opggcloneapp.data.entity.ranking.RankingResponse
 import com.rjhwork.mycompany.opggcloneapp.domain.model.RankingModel
-import com.rjhwork.mycompany.opggcloneapp.domain.usecase.GetChallengerRankingData
-import com.rjhwork.mycompany.opggcloneapp.domain.usecase.GetGrandMasterRankingData
-import com.rjhwork.mycompany.opggcloneapp.domain.usecase.GetMasterRankingData
+import com.rjhwork.mycompany.opggcloneapp.domain.usecase.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.Comparator
+import com.rjhwork.mycompany.opggcloneapp.util.*
 
 class RankingPresenter(
     private var view: RankingContract.View,
     private val getChallengerRankingData: GetChallengerRankingData,
     private val getGrandMasterRankingData: GetGrandMasterRankingData,
-    private val getMasterRankingData: GetMasterRankingData
+    private val getMasterRankingData: GetMasterRankingData,
+    private val getFavoriteByName: GetFavoriteByName,
+    private val getSummonerProfileByName: GetSummonerProfileByName
 ) : RankingContract.Presenter {
 
     override var scope: CoroutineScope = MainScope()
-    var count = 1
+    private var count = 1
 
     override fun onViewCreated() {
         fetchDataList()
@@ -30,7 +32,6 @@ class RankingPresenter(
             try {
                 view.showLoadingIndicator()
                 val list = getChallengerRankingData.invoke()
-                Log.d("RankingFragment", list?.name.toString())
                 list?.let { response ->
                     response
                         .run(::getRankingList)
@@ -52,6 +53,46 @@ class RankingPresenter(
                 2 -> getDataProcess()
                 else -> view.noDataRankingList()
             }
+        }
+    }
+
+    override fun getFavoriteBySummonerName(summonerName: String) {
+        scope.launch {
+            try {
+                view.showLoadingIndicator()
+                val favoriteEntity = getFavoriteByName.invoke(summonerName)
+                view.startMatchActivityWithAnimation(
+                    favoriteEntity,
+                    favoriteEntity.isFavorite?.let {
+                        if (it) "true" else "false"
+                    })
+            } catch (e: Exception) {
+                Log.d("RankingPresenter", "${e.message}")
+                makeNewFavoriteEntity(summonerName)
+            } finally {
+                view.dismissLoadingIndicator()
+            }
+        }
+    }
+
+    private suspend fun makeNewFavoriteEntity(summonerName: String) {
+        try {
+            val data = getSummonerProfileByName.invoke(summonerName)
+            val favoriteEntity = FavoriteEntity(
+                summonerName = data?.name ?: "Unknown",
+                summonerPuuid = data?.puuid,
+                summonerIcon = data?.profileIconId?.let {
+                    DataDragonApi.getSummonerProfileIcon(it.toString())
+                },
+                summonerLevel = data?.summonerLevel.toString(),
+                isFavorite = false
+            )
+            view.startMatchActivityWithAnimation(
+                favoriteEntity,
+                if (favoriteEntity.isFavorite!!) "true" else "false"
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -81,7 +122,6 @@ class RankingPresenter(
     }
 
     private fun getRankingList(response: RankingResponse): List<RankingModel>? {
-        Log.d("RankingFragment", "getRankingList")
         val list = response.entries?.map { entity ->
             RankingModel(
                 freshBlood = entity.freshBlood,
