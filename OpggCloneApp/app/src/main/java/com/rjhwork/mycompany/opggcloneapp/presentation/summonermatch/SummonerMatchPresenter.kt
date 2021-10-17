@@ -61,7 +61,6 @@ class SummonerMatchPresenter(
 
         if (currentMills >= (getTimeMills + (60 * 2 * 1000))) {
             refreshProcess(favoriteEntity)
-            preference.putLong(favoriteEntity.summonerName, Long.MIN_VALUE)
         } else {
             view.showTimeLimitDialog(getTimeMills, currentMills)
         }
@@ -73,11 +72,13 @@ class SummonerMatchPresenter(
         scope.launch {
             favoriteEntity.summonerPuuid?.let { puuid ->
                 try {
+                    preference.putLong(favoriteEntity.summonerName, System.currentTimeMillis())
                     view.disableRefreshClick()
                     view.showRefreshProgress()
                     refreshData(puuid, favoriteEntity, null)
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    preference.putLong(favoriteEntity.summonerName, Long.MIN_VALUE)
                 } finally {
                     view.dismissRefreshProgress()
                     view.enableRefreshClick()

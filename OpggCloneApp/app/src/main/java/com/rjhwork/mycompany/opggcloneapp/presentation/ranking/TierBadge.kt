@@ -20,16 +20,7 @@ class TierBadge(context: Context, attrs: AttributeSet? = null) : AppCompatTextVi
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     init {
-        val verticalPadding = dip(2f)
-        val horizontalPadding = dip(2f)
-        setPadding(
-            horizontalPadding,
-            verticalPadding,
-            horizontalPadding,
-            verticalPadding
-        )
         setTextColor(Color.WHITE)
-        textAlignment = TEXT_ALIGNMENT_CENTER
     }
 
     override fun onDraw(canvas: Canvas?) {
