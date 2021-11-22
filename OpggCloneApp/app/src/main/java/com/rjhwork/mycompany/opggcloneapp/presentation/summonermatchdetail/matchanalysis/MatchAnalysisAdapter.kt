@@ -11,11 +11,11 @@ import com.rjhwork.mycompany.opggcloneapp.presentation.summonermatchdetail.match
 class MatchAnalysisAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     var pair: Pair<String, Match?>? = null
+    var list: List<BindAnalysisData>? = null
 
     override fun getItemCount(): Int = 6
 
     override fun createFragment(position: Int): Fragment {
-        val list = getDataList()
 
         return when (position) {
             0 -> AnalysisDataFragment.newInstance(
@@ -80,18 +80,15 @@ class MatchAnalysisAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
         dataList: List<BindAnalysisData>?,
         position: Int?
     ): List<BindAnalysisData> {
-        if (dataList == null)
-            return emptyList()
-
-        val list = dataList.toMutableList()
+        if (dataList == null) return emptyList()
 
         return when (position) {
-            0 -> list.sortedByDescending { it.kills ?: 0 }
-            1 -> list.sortedByDescending { it.goldEarned ?: 0 }
-            2 -> list.sortedByDescending { it.totalDamageDealtToChampions ?: 0 }
-            3 -> list.sortedByDescending { it.totalDamageShieldedOnTeammates ?: 0 }
-            4 -> list.sortedByDescending { it.totalMinionsKilled ?: 0 }
-            5 -> list.sortedByDescending { it.wardsPlaced ?: 0 }
+            0 -> dataList.sortedByDescending { it.kills ?: 0 }
+            1 -> dataList.sortedByDescending { it.goldEarned ?: 0 }
+            2 -> dataList.sortedByDescending { it.totalDamageDealtToChampions ?: 0 }
+            3 -> dataList.sortedByDescending { it.totalDamageShieldedOnTeammates ?: 0 }
+            4 -> dataList.sortedByDescending { it.totalMinionsKilled ?: 0 }
+            5 -> dataList.sortedByDescending { it.wardsPlaced ?: 0 }
             else -> emptyList()
         }
     }
@@ -106,7 +103,7 @@ class MatchAnalysisAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
         return list.filter(condition1).sumOf(condition2)
     }
 
-    private fun getDataList() = pair?.second?.info?.participants?.map {
+    fun getDataList() = pair?.second?.info?.participants?.map {
         BindAnalysisData(
             puuid = it.puuid,
             win = it.win,

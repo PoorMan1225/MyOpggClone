@@ -29,7 +29,9 @@ data class Data(
     val summonerSnowball:SummonerSnowball,
     @SerializedName("SummonerTeleport")
     val summonerTeleport:SummonerTeleport,
-    @SerializedName("Summoner_UltBook_Placeholder")
-    val summoner_UltBook_Placeholder:Summoner_UltBook_Placeholder,
+    @SerializedName("Summoner_UltBookPlaceholder")
+    val summoner_UltBook_Placeholder:Summoner_UltBookPlaceholder,
+    @SerializedName("Summoner_UltBookSmitePlaceholder")
+    val summoner_UltBookSmitePlaceHolder:Summoner_UltBookSmitePlaceholder
 ) {
 }

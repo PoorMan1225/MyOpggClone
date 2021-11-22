@@ -11,6 +11,7 @@ import com.rjhwork.mycompany.opggcloneapp.domain.usecase.*
 import kotlinx.coroutines.*
 import java.lang.Exception
 
+
 class SummonerMatchDetailPresenter(
     private val view: SummonerMatchDetailContract.View,
     private val getMatchDataByMatchId: GetMatchDataByMatchId,

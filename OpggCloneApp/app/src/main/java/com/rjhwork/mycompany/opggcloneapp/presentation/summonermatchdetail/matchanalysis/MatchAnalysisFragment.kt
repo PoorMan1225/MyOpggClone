@@ -63,6 +63,7 @@ class MatchAnalysisFragment : ScopeFragment(), MatchAnalysisContract.View {
 
         binding?.viewPager?.adapter = MatchAnalysisAdapter(this).apply {
             this.pair = pair
+            list = getDataList()
         }
 
         binding?.let {

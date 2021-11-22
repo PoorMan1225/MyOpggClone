@@ -34,9 +34,11 @@ class SearchPresenter(
     override var scope: CoroutineScope = MainScope()
 
     init {
+        // 최초 앱실행시 코루틴 Flow 에서 방출된 데이터를 가지고
+        // Ui를 업데이트 한다.
         getTrackingFavoriteData()
             .onEach { fetchFavoriteData() }
-            .launchIn(scope)
+            .launchIn(scope) // 어느 스레드에서 흐를 것인지 결정.
     }
 
     override fun onViewCreated() {
@@ -44,17 +46,23 @@ class SearchPresenter(
         fetchFavoriteData()
     }
 
+    // Repository 에서 가져온 APi 데이터를 io 스레드에서 가져온후에
+    // Ui를 업데이트 시키는 역할을 한다.
     private fun fetchFavoriteData() = scope.launch {
         try {
+            // 로딩 다이얼 로그를 보여주는 역할.
             view.showFavoriteLoadingIndicator()
             val summonerName = preferenceManager.getSummonerProfile(SUMMONER_PROFILE_KEY)?.name
             lateinit var favoriteList: List<FavoriteEntity>
             view.showEmptyFavoriteLayout()
 
+            // 기존에 카드뷰의 즐겨찾기 데이터가 존재하는 경우 그 데이터는 제외하고
+            // 나머지 즐겨찾기 데이터만 가져와서 리사이클러뷰에 보여준다.
             summonerName?.let { name ->
                 getFavoriteFilterItems(name).run {
                     favoriteList = this
                     if (size > 0)
+                        // recyclerView 의 visibility 를 true 로 변경해준다.
                         view.showFavoriteDataLayout()
                 }
             } ?: kotlin.run {
@@ -64,14 +72,20 @@ class SearchPresenter(
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
+            // 로딩 다이얼로그는 항상 꺼준다.
             view.dismissFavoriteLoadingIndicator()
         }
     }
 
+    // 프래그먼트에서 화면 전환시에 데이터값이 변경이 되어 있을 수 있기
+    // 때문에 새로 호출해서 재갱신된 데이터를 보여주게 된다.
     override fun retry(dataCheck: Boolean) {
+        // 카드뷰에 icon, 랭킹정보 등을 가져오는 함수.
         fetchProfileSummonerData(dataCheck)
     }
 
+    // View 쪽에서 데이터를 가지고 다른 프래그먼트로 가게 되었을 때
+    // 해당 엔티티를 넘겨주고 애니메이션과 함께 전환이 이루어지게 된다.
     override fun getFavoriteBySummonerName(summonerName: String) {
         scope.launch {
             try {
@@ -85,6 +99,7 @@ class SearchPresenter(
 
     override fun onDestroyView() {}
 
+    // 카드뷰에 이미상의 icon 이나 티어정보, 등등을 가져오는 함수 이다.
     private fun fetchProfileSummonerData(flag: Boolean) {
         if (flag) {
             view.touchEnabledFalse()

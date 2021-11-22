@@ -1,11 +1,11 @@
 package com.rjhwork.mycompany.opggcloneapp.presentation.summonermatch
 
-import android.util.Log
 import com.rjhwork.mycompany.opggcloneapp.data.entity.favorite.FavoriteEntity
 import com.rjhwork.mycompany.opggcloneapp.data.preference.PreferenceManager
 import com.rjhwork.mycompany.opggcloneapp.domain.usecase.*
 import kotlinx.coroutines.*
 
+// 사용자의 전적 리스트를 보여주는 역할을 하는 비즈니스 클래스
 class SummonerMatchPresenter(
     private val view: SummonerMatchContract.View,
     private val getMatchDataDetail: GetMatchDataDetail,
@@ -25,6 +25,7 @@ class SummonerMatchPresenter(
         }
     }
 
+    // 즐겨찾기시 favorite 을 변경하기 위한 함수.
     override fun updateFavoriteData(favoriteEntity: FavoriteEntity) {
         scope.launch {
             try {
@@ -40,16 +41,20 @@ class SummonerMatchPresenter(
         }
     }
 
+    // 즐겨찾기 버튼을 누르게 되면 데이터를 변경해주는 함수
     private suspend fun getData(favoriteEntity: FavoriteEntity): FavoriteEntity = coroutineScope {
         val defferedOne = async { insertFavoriteData.invoke(favoriteEntity) }
+        // 먼저 데이터가 들어오고 변경된 데이터를 가져와야 하기때문에 await()을 하였다.
         defferedOne.await()
         getFavoriteByName.invoke(favoriteEntity.summonerName)
     }
 
-
+    // 데이터를 추가적으로 요청하게 될경우에 인덱스 번호를 토대로 새로운 데이터를 가지고 오게된다.
     override fun showMoreList(favoriteEntity: FavoriteEntity, index: Int): Int =
         moreRequestDataList(favoriteEntity.summonerPuuid!!, index)
 
+    // 전적 갱신 버튼을 누를시 갱신이 한번 되어있는 Entity 인지 확인해서
+    // 갱신이 한번 된적이 있다면 120초 후에 다시 시도하게 만든다.
     override fun showRefreshList(favoriteEntity: FavoriteEntity) {
         val currentMills = System.currentTimeMillis()
         val getTimeMills = preference.getLong(favoriteEntity.summonerName)
@@ -103,6 +108,8 @@ class SummonerMatchPresenter(
         }
     }
 
+    // 리스트 데이터를 더 가져왔을때 데이터를 가져오지 못한 경우에는 index를 다시 빼주기 위해서
+    // Exception -1 을 넘겨준다.
     private fun moreRequestDataList(puuid: String, index: Int): Int {
         var checkException = 0
 

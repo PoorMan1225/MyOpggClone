@@ -84,6 +84,8 @@ class SummonerMatchActivity : ScopeActivity(), SummonerMatchContract.View {
                     ) {
                         showViewHolderProgress()
                         index += 10
+                        // 데이터를 가져오는 과정에서 문제가 생겻을 경우에 증가된 인덱스를 감소시켜
+                        // 다시 가져올때 정상적으로 가져오게 한다.
                         if (presenter.showMoreList(favoriteEntity, index) == -1) {
                             index -= 10
                         }

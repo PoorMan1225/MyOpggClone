@@ -15,7 +15,9 @@ class OpggAplication: Application()  {
 
     override fun onCreate() {
         super.onCreate()
+        // Dependency inversion 을 위한 Koin 시작.
         startKoin {
+            // 빌드상 에러 발생시 로그 출력
             androidLogger(
                 if(BuildConfig.DEBUG) {
                     Level.DEBUG
@@ -24,7 +26,12 @@ class OpggAplication: Application()  {
                 }
             )
             androidContext(this@OpggAplication)
-            modules(appModule + dataModule + domainModule + presenterModule)
+            // modules 에서 필요한 레이어의 객체 생성 제어를 넘겨주게된다.
+            modules(appModule
+                    + dataModule
+                    + domainModule
+                    + presenterModule
+            )
         }
     }
 }
